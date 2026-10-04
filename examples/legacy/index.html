@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html ng-app="harbor">
+<head>
+  <title>Harbor Tea</title>
+  <script type="text/ng-template" id="empty.html">
+    <p class="empty">{{ 'No tea found' | uppercase }}</p>
+  </script>
+</head>
+<body>
+  <main ng-controller="CatalogController">
+    <input type="search" ng-model="query">
+    <tea-card ng-repeat="tea in filtered | orderBy:'name'" tea="tea" on-pick="pick(tea)"></tea-card>
+    <p>{{ inCart || 0 }} in the cart, from {{ 4.5 | currency }}</p>
+    <cart-summary items="cart.items" total="cart.total"></cart-summary>
+  </main>
+  <div data-ng-include="'app/partials/footer.html'"></div>
+</body>
+</html>

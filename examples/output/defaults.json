@@ -1,0 +1,46 @@
+{
+  "name": "built-in defaults",
+  "files": [
+    "**/*.js",
+    "**/*.mjs",
+    "**/*.cjs",
+    "**/*.ts",
+    "**/*.html",
+    "**/*.htm"
+  ],
+  "exclude": [
+    "dist/**",
+    "build/**",
+    "coverage/**",
+    "**/*.min.js",
+    "**/*.bundle.js",
+    "**/*.spec.js",
+    "**/*.spec.ts",
+    "**/*.test.js",
+    "**/*.test.ts"
+  ],
+  "rules": {
+    "moduleDeclaration": "info",
+    "moduleRegistration": "info",
+    "dynamicName": "info",
+    "templateFilter": "info",
+    "scopeUse": "warning",
+    "rootScopeUse": "warning",
+    "scopeWatch": "warning",
+    "scopeEvent": "warning",
+    "compileUse": "warning",
+    "timerUse": "warning",
+    "twoWayBinding": "warning",
+    "templateController": "warning",
+    "templateInclude": "warning",
+    "duplicateModule": "warning",
+    "moduleCycle": "warning"
+  },
+  "minSeverity": "info",
+  "failOn": "error",
+  "weights": {
+    "linesPerPoint": 10,
+    "registration": 5,
+    "risk": 3
+  }
+}

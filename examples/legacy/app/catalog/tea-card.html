@@ -1,0 +1,5 @@
+<article class="tea">
+  <h2>{{ tea.name | uppercase }}</h2>
+  <p>Steep {{ tea.steep | steepTime }}, {{ tea.price | currency }}</p>
+  <button data-ng-click="onPick()" quick-add>Pick</button>
+</article>

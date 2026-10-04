@@ -1,0 +1,5 @@
+<ul>
+  <li ng-repeat="item in $ctrl.items track by item.id">{{ item.name }}: {{ item.price | currency }}</li>
+</ul>
+<p ng-if="$ctrl.items.length">Total {{ $ctrl.total | currency }}</p>
+<button ng-click="$ctrl.clear()">Clear</button>

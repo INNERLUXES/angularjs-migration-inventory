@@ -1,0 +1,5 @@
+{
+  "name": "Harbor Tea",
+  "exclude": { "add": ["vendor/**"] },
+  "failOn": "warning"
+}

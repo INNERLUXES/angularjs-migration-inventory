@@ -1,0 +1,47 @@
+angularjs-migration-inventory: examples/clean
+input: examples/clean (2 files: 1 javascript, 1 template)
+config: built-in defaults: 6 file patterns, 9 exclude patterns; minimum severity info; fail on error
+rules: module-declaration (info); module-registration (info); dynamic-name (info); template-filter (info); scope-use (warning); root-scope-use (warning); scope-watch (warning); scope-event (warning); compile-use (warning); timer-use (warning); two-way-binding (warning); template-controller (warning); template-include (warning); duplicate-module (warning); module-cycle (warning); unreadable-file (error); untokenizable-file (error)
+findings: 3 (3 info)
+
+Findings (3)
+
+  INFO     module-declaration   examples/clean/notes.module.js:2
+           module notes is declared with no dependency
+
+  INFO     module-registration  examples/clean/notes.module.js:3
+           component noteList on notes; dependencies in $inject: noteStore
+
+  INFO     module-registration  examples/clean/notes.module.js:8
+           service noteStore on notes; no dependency
+
+Modules, in the suggested migration order
+
+  order  module  dependents  files  lines  risks  score  registrations
+  1      notes   0           2      19     0      13     component 1, service 1
+
+  module  declared at                       depends on
+  notes   examples/clean/notes.module.js:2  -
+
+Registrations
+
+  2: component 1, service 1
+  annotations: array 0, $inject 1, parameter names only 0, no dependency 1, not visible 0
+
+Templates
+
+  1 template: ng-controller 0, ng-include 0
+  filters: none
+  directives: ngClick 1 and ngRepeat 1
+
+Files, highest score first
+
+  score  lines  registrations  risks  module  file
+  12     16     2              0      notes   examples/clean/notes.module.js
+  1      3      0              0      notes   examples/clean/note-list.html
+
+  score = lines / 10 (rounded up) + 5 per registration + 3 per risk
+
+This inventory lists what the tool could read in the files it was given: module declarations, registrations with a string name, risks and template use. It does not run the code or follow a name built at run time, a registration made through a variable of another kind, or code a bundler wrote, so the counts are a lower bound (docs/limits.md).
+
+RESULT: PASS - no finding at or above error (3 info)

@@ -1,0 +1,1947 @@
+{
+  "tool": "angularjs-migration-inventory",
+  "version": "1.0.0",
+  "input": {
+    "paths": [
+      "examples/legacy"
+    ],
+    "files": [
+      {
+        "file": "examples/legacy/app/app.module.js",
+        "kind": "javascript"
+      },
+      {
+        "file": "examples/legacy/app/cart/cart-summary.html",
+        "kind": "template"
+      },
+      {
+        "file": "examples/legacy/app/cart/cart.module.js",
+        "kind": "javascript"
+      },
+      {
+        "file": "examples/legacy/app/catalog/catalog.html",
+        "kind": "template"
+      },
+      {
+        "file": "examples/legacy/app/catalog/catalog.module.js",
+        "kind": "javascript"
+      },
+      {
+        "file": "examples/legacy/app/catalog/tea-card.html",
+        "kind": "template"
+      },
+      {
+        "file": "examples/legacy/app/core/clock.service.ts",
+        "kind": "typescript"
+      },
+      {
+        "file": "examples/legacy/app/core/core.module.js",
+        "kind": "javascript"
+      },
+      {
+        "file": "examples/legacy/app/partials/footer.html",
+        "kind": "template"
+      },
+      {
+        "file": "examples/legacy/app/promo/banner.js",
+        "kind": "javascript"
+      },
+      {
+        "file": "examples/legacy/app/promo/promo.module.js",
+        "kind": "javascript"
+      },
+      {
+        "file": "examples/legacy/index.html",
+        "kind": "template"
+      }
+    ]
+  },
+  "config": {
+    "file": "examples/config.json",
+    "name": "Harbor Tea",
+    "files": [
+      "**/*.js",
+      "**/*.mjs",
+      "**/*.cjs",
+      "**/*.ts",
+      "**/*.html",
+      "**/*.htm"
+    ],
+    "exclude": [
+      "dist/**",
+      "build/**",
+      "coverage/**",
+      "**/*.min.js",
+      "**/*.bundle.js",
+      "**/*.spec.js",
+      "**/*.spec.ts",
+      "**/*.test.js",
+      "**/*.test.ts",
+      "vendor/**"
+    ],
+    "minSeverity": "info",
+    "failOn": "warning",
+    "weights": {
+      "linesPerPoint": 10,
+      "registration": 5,
+      "risk": 3
+    },
+    "rules": [
+      {
+        "id": "module-declaration",
+        "key": "moduleDeclaration",
+        "category": "inventory",
+        "level": "info",
+        "rule": "a call angular.module(name, [dependencies]) with two or more arguments, which creates a module"
+      },
+      {
+        "id": "module-registration",
+        "key": "moduleRegistration",
+        "category": "inventory",
+        "level": "info",
+        "rule": "a call of controller, directive, component, service, factory, provider, filter, constant, value, config or run on a module, with its name and the way its dependencies are annotated"
+      },
+      {
+        "id": "dynamic-name",
+        "key": "dynamicName",
+        "category": "inventory",
+        "level": "info",
+        "rule": "an angular.module call or a registration whose name is a variable, an expression or a template with substitutions"
+      },
+      {
+        "id": "template-filter",
+        "key": "templateFilter",
+        "category": "inventory",
+        "level": "info",
+        "rule": "a | followed by a filter name in an interpolation or an ng attribute of a template"
+      },
+      {
+        "id": "scope-use",
+        "key": "scopeUse",
+        "category": "risk",
+        "level": "warning",
+        "rule": "the name $scope, or the string '$scope', in a script"
+      },
+      {
+        "id": "root-scope-use",
+        "key": "rootScopeUse",
+        "category": "risk",
+        "level": "warning",
+        "rule": "the name $rootScope, or the string '$rootScope', in a script"
+      },
+      {
+        "id": "scope-watch",
+        "key": "scopeWatch",
+        "category": "risk",
+        "level": "warning",
+        "rule": "a call of $watch, $watchCollection or $watchGroup as a method"
+      },
+      {
+        "id": "scope-event",
+        "key": "scopeEvent",
+        "category": "risk",
+        "level": "warning",
+        "rule": "a call of $broadcast, $emit or $on as a method"
+      },
+      {
+        "id": "compile-use",
+        "key": "compileUse",
+        "category": "risk",
+        "level": "warning",
+        "rule": "a call of $compile"
+      },
+      {
+        "id": "timer-use",
+        "key": "timerUse",
+        "category": "risk",
+        "level": "warning",
+        "rule": "a call of $timeout or $interval"
+      },
+      {
+        "id": "two-way-binding",
+        "key": "twoWayBinding",
+        "category": "risk",
+        "level": "warning",
+        "rule": "a binding of the form = in a scope, bindToController or bindings object"
+      },
+      {
+        "id": "template-controller",
+        "key": "templateController",
+        "category": "risk",
+        "level": "warning",
+        "rule": "an attribute that normalizes to ngController"
+      },
+      {
+        "id": "template-include",
+        "key": "templateInclude",
+        "category": "risk",
+        "level": "warning",
+        "rule": "an attribute or element that normalizes to ngInclude"
+      },
+      {
+        "id": "duplicate-module",
+        "key": "duplicateModule",
+        "category": "risk",
+        "level": "warning",
+        "rule": "angular.module(name, [...]) for a name that an earlier declaration in the files read already used"
+      },
+      {
+        "id": "module-cycle",
+        "key": "moduleCycle",
+        "category": "risk",
+        "level": "warning",
+        "rule": "a cycle in the dependencies between the modules declared in the files read"
+      },
+      {
+        "id": "unreadable-file",
+        "key": null,
+        "category": "input",
+        "level": "error",
+        "rule": "a file of the input that the tool could not read as UTF-8 text"
+      },
+      {
+        "id": "untokenizable-file",
+        "key": null,
+        "category": "input",
+        "level": "error",
+        "rule": "a script or template with a form that is not closed"
+      }
+    ]
+  },
+  "findings": [
+    {
+      "rule": "untokenizable-file",
+      "level": "error",
+      "category": "input",
+      "file": "examples/legacy/app/promo/banner.js",
+      "line": 3,
+      "column": 15,
+      "at": "examples/legacy/app/promo/banner.js:3",
+      "found": "line 3, column 15: a string that is not closed before the end of its line; the file was not read past this point, and nothing in it is counted but its lines",
+      "module": null,
+      "modern": null,
+      "basis": [
+        {
+          "text": "JavaScript has line and block comments, a hashbang at the very start, strings in single or double quotes, template literals with substitutions and regular expression literals, and whether a slash starts a regular expression or divides depends on what comes before it",
+          "source": "Lexical grammar (MDN Web Docs)",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar"
+        },
+        {
+          "text": "a start tag holds attributes whose values are unquoted or in single or double quotes, a comment runs from <!-- to -->, script and style hold raw text, and tag names do not depend on case",
+          "source": "HTML Standard, section 13.1: Writing HTML documents (WHATWG)",
+          "url": "https://html.spec.whatwg.org/multipage/syntax.html"
+        }
+      ],
+      "own": "a string, template literal, comment, regular expression, tag or attribute value that is not closed stops the reading of the file; nothing in it is counted except its lines; this rule cannot be set lower or off"
+    },
+    {
+      "rule": "root-scope-use",
+      "level": "warning",
+      "category": "risk",
+      "file": "examples/legacy/app/app.module.js",
+      "line": 10,
+      "column": 11,
+      "at": "examples/legacy/app/app.module.js:10",
+      "found": "$rootScope appears 3 times in this file, first here",
+      "module": null,
+      "modern": "a service provided at the root holds the shared state, with signals or an observable for its changes",
+      "basis": [
+        {
+          "text": "every app has one root scope and child scopes that follow the structure of the page and inherit from their parents",
+          "source": "What are Scopes? (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/scope"
+        },
+        {
+          "text": "a service provided at the root of the app is one shared instance, the place for state and logic that several components use",
+          "source": "Creating and using services (angular.dev)",
+          "url": "https://angular.dev/guide/di/creating-and-using-services"
+        }
+      ],
+      "own": "reported once per file at its first use, with the count of uses"
+    },
+    {
+      "rule": "scope-event",
+      "level": "warning",
+      "category": "risk",
+      "file": "examples/legacy/app/app.module.js",
+      "line": 11,
+      "column": 18,
+      "at": "examples/legacy/app/app.module.js:11",
+      "found": "$on of \"$routeChangeError\" is called on $rootScope",
+      "module": null,
+      "modern": "output() from a child to its parent; a shared service with a signal or a Subject for events that cross the app",
+      "basis": [
+        {
+          "text": "$emit sends an event up the tree of scopes, $broadcast sends it down to the child scopes, and $on listens for it",
+          "source": "What are Scopes? (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/scope"
+        },
+        {
+          "text": "output declares a custom event that a child component emits to its parent, and these events do not bubble up the page",
+          "source": "Custom events with outputs (angular.dev)",
+          "url": "https://angular.dev/guide/components/outputs"
+        },
+        {
+          "text": "a service provided at the root of the app is one shared instance, the place for state and logic that several components use",
+          "source": "Creating and using services (angular.dev)",
+          "url": "https://angular.dev/guide/di/creating-and-using-services"
+        }
+      ],
+      "own": "each call is reported with the event name when it is a string literal"
+    },
+    {
+      "rule": "two-way-binding",
+      "level": "warning",
+      "category": "risk",
+      "file": "examples/legacy/app/cart/cart.module.js",
+      "line": 4,
+      "column": 24,
+      "at": "examples/legacy/app/cart/cart.module.js:4",
+      "found": "items: '=' in the bindings of a component binds two ways",
+      "module": null,
+      "modern": "input() for data in and output() for changes out, or model() with [( )] where two-way binding is meant",
+      "basis": [
+        {
+          "text": "in the scope or bindToController object of a directive, = (also with ? or * after it) binds a value both ways, < one way, @ as a string and & as an expression",
+          "source": "$compile (AngularJS API Reference)",
+          "url": "https://docs.angularjs.org/api/ng/service/$compile"
+        },
+        {
+          "text": "a component should take its inputs with < and @ and report changes through & callbacks, so that only the component that owns the data changes it; components also make a later move to Angular easier",
+          "source": "Understanding Components (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/component"
+        },
+        {
+          "text": "input takes data from a parent component, and a model input also sends new values back, bound with the [( )] syntax for two-way binding",
+          "source": "Accepting data with input properties (angular.dev)",
+          "url": "https://angular.dev/guide/components/inputs"
+        }
+      ],
+      "own": "a binding whose value is =, =?, =* or =*? with or without an attribute name, inside an object under scope, bindToController or bindings"
+    },
+    {
+      "rule": "compile-use",
+      "level": "warning",
+      "category": "risk",
+      "file": "examples/legacy/app/cart/cart.module.js",
+      "line": 12,
+      "column": 24,
+      "at": "examples/legacy/app/cart/cart.module.js:12",
+      "found": "$compile is called to compile markup while the app runs",
+      "module": null,
+      "modern": "NgComponentOutlet or ViewContainerRef.createComponent with a component class; markup is not compiled at run time",
+      "basis": [
+        {
+          "text": "$compile turns an HTML string or a piece of the page into a template function that is linked to a scope while the app runs",
+          "source": "$compile (AngularJS API Reference)",
+          "url": "https://docs.angularjs.org/api/ng/service/$compile"
+        },
+        {
+          "text": "a component that is not known in advance is rendered with NgComponentOutlet or ViewContainerRef.createComponent, from a component class that is already compiled",
+          "source": "Programmatically rendering components (angular.dev)",
+          "url": "https://angular.dev/guide/components/programmatic-rendering"
+        }
+      ],
+      "own": "each call of $compile is reported; Angular has no counterpart that compiles a template string while the app runs"
+    },
+    {
+      "rule": "root-scope-use",
+      "level": "warning",
+      "category": "risk",
+      "file": "examples/legacy/app/cart/cart.module.js",
+      "line": 17,
+      "column": 32,
+      "at": "examples/legacy/app/cart/cart.module.js:17",
+      "found": "$rootScope appears 2 times in this file, first here",
+      "module": null,
+      "modern": "a service provided at the root holds the shared state, with signals or an observable for its changes",
+      "basis": [
+        {
+          "text": "every app has one root scope and child scopes that follow the structure of the page and inherit from their parents",
+          "source": "What are Scopes? (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/scope"
+        },
+        {
+          "text": "a service provided at the root of the app is one shared instance, the place for state and logic that several components use",
+          "source": "Creating and using services (angular.dev)",
+          "url": "https://angular.dev/guide/di/creating-and-using-services"
+        }
+      ],
+      "own": "reported once per file at its first use, with the count of uses"
+    },
+    {
+      "rule": "timer-use",
+      "level": "warning",
+      "category": "risk",
+      "file": "examples/legacy/app/cart/cart.module.js",
+      "line": 21,
+      "column": 5,
+      "at": "examples/legacy/app/cart/cart.module.js:21",
+      "found": "$timeout is called",
+      "module": null,
+      "modern": "setTimeout and setInterval, or timer() and interval() of RxJS; with signals the view updates without a digest",
+      "basis": [
+        {
+          "text": "$timeout wraps setTimeout and by default runs the function inside $apply, so the digest sees what it changed; it returns a promise that can be cancelled",
+          "source": "$timeout (AngularJS API Reference)",
+          "url": "https://docs.angularjs.org/api/ng/service/$timeout"
+        },
+        {
+          "text": "signal, computed and effect track where state is read, so derived values and side effects follow their inputs without a watcher written by hand",
+          "source": "Signals (angular.dev)",
+          "url": "https://angular.dev/guide/signals"
+        }
+      ],
+      "own": "each call is reported; the timer itself moves easily, the digest it starts is what the new code no longer has"
+    },
+    {
+      "rule": "scope-event",
+      "level": "warning",
+      "category": "risk",
+      "file": "examples/legacy/app/cart/cart.module.js",
+      "line": 21,
+      "column": 39,
+      "at": "examples/legacy/app/cart/cart.module.js:21",
+      "found": "$broadcast of \"cart:changed\" is called on $rootScope",
+      "module": null,
+      "modern": "output() from a child to its parent; a shared service with a signal or a Subject for events that cross the app",
+      "basis": [
+        {
+          "text": "$emit sends an event up the tree of scopes, $broadcast sends it down to the child scopes, and $on listens for it",
+          "source": "What are Scopes? (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/scope"
+        },
+        {
+          "text": "output declares a custom event that a child component emits to its parent, and these events do not bubble up the page",
+          "source": "Custom events with outputs (angular.dev)",
+          "url": "https://angular.dev/guide/components/outputs"
+        },
+        {
+          "text": "a service provided at the root of the app is one shared instance, the place for state and logic that several components use",
+          "source": "Creating and using services (angular.dev)",
+          "url": "https://angular.dev/guide/di/creating-and-using-services"
+        }
+      ],
+      "own": "each call is reported with the event name when it is a string literal"
+    },
+    {
+      "rule": "scope-use",
+      "level": "warning",
+      "category": "risk",
+      "file": "examples/legacy/app/catalog/catalog.module.js",
+      "line": 3,
+      "column": 37,
+      "at": "examples/legacy/app/catalog/catalog.module.js:3",
+      "found": "$scope appears 10 times in this file, first here",
+      "module": null,
+      "modern": "state lives on the component class and in signals; data from a parent comes through input() and goes back through output()",
+      "basis": [
+        {
+          "text": "every app has one root scope and child scopes that follow the structure of the page and inherit from their parents",
+          "source": "What are Scopes? (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/scope"
+        },
+        {
+          "text": "a component should take its inputs with < and @ and report changes through & callbacks, so that only the component that owns the data changes it; components also make a later move to Angular easier",
+          "source": "Understanding Components (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/component"
+        },
+        {
+          "text": "the guide to upgrading from AngularJS advises one component per file, folders by feature, a module loader, TypeScript and component directives, and then a hybrid app that moves the code piece by piece",
+          "source": "Upgrading from AngularJS (Angular documentation, v17)",
+          "url": "https://v17.angular.io/guide/upgrade"
+        }
+      ],
+      "own": "reported once per file at its first use, with the count of uses: the name $scope in the code and the string '$scope' in an annotation"
+    },
+    {
+      "rule": "scope-watch",
+      "level": "warning",
+      "category": "risk",
+      "file": "examples/legacy/app/catalog/catalog.module.js",
+      "line": 8,
+      "column": 12,
+      "at": "examples/legacy/app/catalog/catalog.module.js:8",
+      "found": "$watch is called on $scope",
+      "module": null,
+      "modern": "computed() for a derived value, effect() for a side effect, or the input itself as a signal; RxJS for streams",
+      "basis": [
+        {
+          "text": "$watch and $watchCollection observe an expression on a scope and are checked in every digest, which repeats until the model settles",
+          "source": "What are Scopes? (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/scope"
+        },
+        {
+          "text": "signal, computed and effect track where state is read, so derived values and side effects follow their inputs without a watcher written by hand",
+          "source": "Signals (angular.dev)",
+          "url": "https://angular.dev/guide/signals"
+        }
+      ],
+      "own": "each call is reported, on whatever object it is made"
+    },
+    {
+      "rule": "scope-event",
+      "level": "warning",
+      "category": "risk",
+      "file": "examples/legacy/app/catalog/catalog.module.js",
+      "line": 12,
+      "column": 12,
+      "at": "examples/legacy/app/catalog/catalog.module.js:12",
+      "found": "$on of \"cart:changed\" is called on $scope",
+      "module": null,
+      "modern": "output() from a child to its parent; a shared service with a signal or a Subject for events that cross the app",
+      "basis": [
+        {
+          "text": "$emit sends an event up the tree of scopes, $broadcast sends it down to the child scopes, and $on listens for it",
+          "source": "What are Scopes? (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/scope"
+        },
+        {
+          "text": "output declares a custom event that a child component emits to its parent, and these events do not bubble up the page",
+          "source": "Custom events with outputs (angular.dev)",
+          "url": "https://angular.dev/guide/components/outputs"
+        },
+        {
+          "text": "a service provided at the root of the app is one shared instance, the place for state and logic that several components use",
+          "source": "Creating and using services (angular.dev)",
+          "url": "https://angular.dev/guide/di/creating-and-using-services"
+        }
+      ],
+      "own": "each call is reported with the event name when it is a string literal"
+    },
+    {
+      "rule": "two-way-binding",
+      "level": "warning",
+      "category": "risk",
+      "file": "examples/legacy/app/catalog/catalog.module.js",
+      "line": 19,
+      "column": 21,
+      "at": "examples/legacy/app/catalog/catalog.module.js:19",
+      "found": "tea: '=' in the isolate scope of a directive binds two ways",
+      "module": null,
+      "modern": "input() for data in and output() for changes out, or model() with [( )] where two-way binding is meant",
+      "basis": [
+        {
+          "text": "in the scope or bindToController object of a directive, = (also with ? or * after it) binds a value both ways, < one way, @ as a string and & as an expression",
+          "source": "$compile (AngularJS API Reference)",
+          "url": "https://docs.angularjs.org/api/ng/service/$compile"
+        },
+        {
+          "text": "a component should take its inputs with < and @ and report changes through & callbacks, so that only the component that owns the data changes it; components also make a later move to Angular easier",
+          "source": "Understanding Components (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/component"
+        },
+        {
+          "text": "input takes data from a parent component, and a model input also sends new values back, bound with the [( )] syntax for two-way binding",
+          "source": "Accepting data with input properties (angular.dev)",
+          "url": "https://angular.dev/guide/components/inputs"
+        }
+      ],
+      "own": "a binding whose value is =, =?, =* or =*? with or without an attribute name, inside an object under scope, bindToController or bindings"
+    },
+    {
+      "rule": "timer-use",
+      "level": "warning",
+      "category": "risk",
+      "file": "examples/legacy/app/core/clock.service.ts",
+      "line": 9,
+      "column": 10,
+      "at": "examples/legacy/app/core/clock.service.ts:9",
+      "found": "$interval is called",
+      "module": null,
+      "modern": "setTimeout and setInterval, or timer() and interval() of RxJS; with signals the view updates without a digest",
+      "basis": [
+        {
+          "text": "$timeout wraps setTimeout and by default runs the function inside $apply, so the digest sees what it changed; it returns a promise that can be cancelled",
+          "source": "$timeout (AngularJS API Reference)",
+          "url": "https://docs.angularjs.org/api/ng/service/$timeout"
+        },
+        {
+          "text": "signal, computed and effect track where state is read, so derived values and side effects follow their inputs without a watcher written by hand",
+          "source": "Signals (angular.dev)",
+          "url": "https://angular.dev/guide/signals"
+        }
+      ],
+      "own": "each call is reported; the timer itself moves easily, the digest it starts is what the new code no longer has"
+    },
+    {
+      "rule": "module-cycle",
+      "level": "warning",
+      "category": "risk",
+      "file": "examples/legacy/app/promo/promo.module.js",
+      "line": 4,
+      "column": 9,
+      "at": "examples/legacy/app/promo/promo.module.js:4",
+      "found": "modules harbor.offers -> harbor.promo -> harbor.offers depend on each other; none of them can move before the others",
+      "module": "harbor.offers",
+      "modern": "standalone components and services that import what they use, with no cycle between features",
+      "basis": [
+        {
+          "text": "a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "the guide to upgrading from AngularJS advises one component per file, folders by feature, a module loader, TypeScript and component directives, and then a hybrid app that moves the code piece by piece",
+          "source": "Upgrading from AngularJS (Angular documentation, v17)",
+          "url": "https://v17.angular.io/guide/upgrade"
+        }
+      ],
+      "own": "AngularJS loads such modules, but no module of the cycle can move first; the migration order breaks the cycle at the module with the fewest unmet dependencies"
+    },
+    {
+      "rule": "duplicate-module",
+      "level": "warning",
+      "category": "risk",
+      "file": "examples/legacy/app/promo/promo.module.js",
+      "line": 6,
+      "column": 9,
+      "at": "examples/legacy/app/promo/promo.module.js:6",
+      "found": "module harbor.core is declared again; it was declared first at examples/legacy/app/core/core.module.js:2, and a second declaration replaces the module with everything registered on it before",
+      "module": "harbor.core",
+      "modern": "one NgModule or one set of standalone components per feature; nothing replaces a module that exists",
+      "basis": [
+        {
+          "text": "creating a module under a name that is already in use replaces that module, and with it everything that was registered on it before",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        }
+      ],
+      "own": "the second and later declarations are reported; which one wins depends on the order the scripts load, which the tool does not know"
+    },
+    {
+      "rule": "template-controller",
+      "level": "warning",
+      "category": "risk",
+      "file": "examples/legacy/index.html",
+      "line": 10,
+      "column": 9,
+      "at": "examples/legacy/index.html:10",
+      "found": "ng-controller=\"CatalogController\" attaches the controller CatalogController to this markup (registered on harbor.catalog)",
+      "module": "harbor.catalog",
+      "modern": "a component with a selector and its own template takes the place of the controller and the markup it was attached to",
+      "basis": [
+        {
+          "text": "ng-controller attaches a controller to a part of the page and gives it a new scope, and controller as names the instance in the template",
+          "source": "ngController (AngularJS API Reference)",
+          "url": "https://docs.angularjs.org/api/ng/directive/ngController"
+        },
+        {
+          "text": "an element or attribute name is matched to a directive after x- and data- are taken off its front and the parts split at a colon, a dash or an underscore are joined in camelCase, so ng-model, data-ng-model and ng:model all mean ngModel",
+          "source": "Creating Custom Directives (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/directive"
+        },
+        {
+          "text": "the guide to upgrading from AngularJS advises one component per file, folders by feature, a module loader, TypeScript and component directives, and then a hybrid app that moves the code piece by piece",
+          "source": "Upgrading from AngularJS (Angular documentation, v17)",
+          "url": "https://v17.angular.io/guide/upgrade"
+        }
+      ],
+      "own": "every spelling AngularJS accepts is read: ng-controller, data-ng-controller, x-ng-controller, ng:controller and ng_controller"
+    },
+    {
+      "rule": "template-include",
+      "level": "warning",
+      "category": "risk",
+      "file": "examples/legacy/index.html",
+      "line": 16,
+      "column": 8,
+      "at": "examples/legacy/index.html:16",
+      "found": "ng-include=\"'app/partials/footer.html'\" fetches and compiles a template while the app runs",
+      "module": null,
+      "modern": "a child component, or ngTemplateOutlet for markup kept in the same template",
+      "basis": [
+        {
+          "text": "ng-include fetches, compiles and includes an HTML fragment whose address is an expression, written as an element or as an attribute",
+          "source": "ngInclude (AngularJS API Reference)",
+          "url": "https://docs.angularjs.org/api/ng/directive/ngInclude"
+        },
+        {
+          "text": "an element or attribute name is matched to a directive after x- and data- are taken off its front and the parts split at a colon, a dash or an underscore are joined in camelCase, so ng-model, data-ng-model and ng:model all mean ngModel",
+          "source": "Creating Custom Directives (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/directive"
+        }
+      ],
+      "own": "the attribute and the element forms are read; the address is shown as written, since it is an expression"
+    },
+    {
+      "rule": "module-declaration",
+      "level": "info",
+      "category": "inventory",
+      "file": "examples/legacy/app/app.module.js",
+      "line": 6,
+      "column": 6,
+      "at": "examples/legacy/app/app.module.js:6",
+      "found": "module harbor is declared with 4 dependencies: harbor.core, harbor.catalog, harbor.cart, ngRoute",
+      "module": "harbor",
+      "modern": null,
+      "basis": [
+        {
+          "text": "a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "the guide to upgrading from AngularJS advises one component per file, folders by feature, a module loader, TypeScript and component directives, and then a hybrid app that moves the code piece by piece",
+          "source": "Upgrading from AngularJS (Angular documentation, v17)",
+          "url": "https://v17.angular.io/guide/upgrade"
+        }
+      ],
+      "own": "only a call with a string literal as its name and a second argument counts as a declaration; a dependency that is not a string literal is counted, not named"
+    },
+    {
+      "rule": "module-registration",
+      "level": "info",
+      "category": "inventory",
+      "file": "examples/legacy/app/app.module.js",
+      "line": 7,
+      "column": 6,
+      "at": "examples/legacy/app/app.module.js:7",
+      "found": "config block on harbor; dependencies in an array: $routeProvider",
+      "module": "harbor",
+      "modern": null,
+      "basis": [
+        {
+          "text": "a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "config blocks run while the providers are set up, before any service exists, and run blocks run once the injector is made, much like the main method of the app",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "a component names what it needs in an inline array before its function, in an $inject property, or only through the names of its parameters, and the last form breaks once a minifier renames the parameters",
+          "source": "Dependency Injection (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/di"
+        }
+      ],
+      "own": "a registration is read when it is chained on angular.module(...) or on a variable that holds a module (in the same file, or in exactly one way across the files read); the annotation is the array, $inject, implicit (parameter names only) or none, as far as the file shows it"
+    },
+    {
+      "rule": "module-registration",
+      "level": "info",
+      "category": "inventory",
+      "file": "examples/legacy/app/app.module.js",
+      "line": 10,
+      "column": 6,
+      "at": "examples/legacy/app/app.module.js:10",
+      "found": "run block on harbor; dependencies in an array: $rootScope, $log",
+      "module": "harbor",
+      "modern": null,
+      "basis": [
+        {
+          "text": "a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "config blocks run while the providers are set up, before any service exists, and run blocks run once the injector is made, much like the main method of the app",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "a component names what it needs in an inline array before its function, in an $inject property, or only through the names of its parameters, and the last form breaks once a minifier renames the parameters",
+          "source": "Dependency Injection (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/di"
+        }
+      ],
+      "own": "a registration is read when it is chained on angular.module(...) or on a variable that holds a module (in the same file, or in exactly one way across the files read); the annotation is the array, $inject, implicit (parameter names only) or none, as far as the file shows it"
+    },
+    {
+      "rule": "template-filter",
+      "level": "info",
+      "category": "inventory",
+      "file": "examples/legacy/app/cart/cart-summary.html",
+      "line": 2,
+      "column": 89,
+      "at": "examples/legacy/app/cart/cart-summary.html:2",
+      "found": "filter currency (built in) is used 2 times in this template, first here",
+      "module": null,
+      "modern": "a pipe in the Angular template, with the same | syntax; a custom filter becomes a pipe class",
+      "basis": [
+        {
+          "text": "a filter is applied in a template expression with the | character, takes its arguments after colons, and filters can be chained",
+          "source": "Filters (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/filter"
+        },
+        {
+          "text": "a pipe transforms a value in a template with the | operator, takes its arguments after colons, and pipes chain from left to right",
+          "source": "Pipes (angular.dev)",
+          "url": "https://angular.dev/guide/templates/pipes"
+        }
+      ],
+      "own": "counted once per filter name and template, at its first use; the expressions read are the {{ }} interpolations and the values of ng attributes that hold expressions"
+    },
+    {
+      "rule": "module-declaration",
+      "level": "info",
+      "category": "inventory",
+      "file": "examples/legacy/app/cart/cart.module.js",
+      "line": 2,
+      "column": 9,
+      "at": "examples/legacy/app/cart/cart.module.js:2",
+      "found": "module harbor.cart is declared with 2 dependencies: harbor.core, harbor.catalog",
+      "module": "harbor.cart",
+      "modern": null,
+      "basis": [
+        {
+          "text": "a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "the guide to upgrading from AngularJS advises one component per file, folders by feature, a module loader, TypeScript and component directives, and then a hybrid app that moves the code piece by piece",
+          "source": "Upgrading from AngularJS (Angular documentation, v17)",
+          "url": "https://v17.angular.io/guide/upgrade"
+        }
+      ],
+      "own": "only a call with a string literal as its name and a second argument counts as a declaration; a dependency that is not a string literal is counted, not named"
+    },
+    {
+      "rule": "module-registration",
+      "level": "info",
+      "category": "inventory",
+      "file": "examples/legacy/app/cart/cart.module.js",
+      "line": 3,
+      "column": 4,
+      "at": "examples/legacy/app/cart/cart.module.js:3",
+      "found": "component cartSummary on harbor.cart; dependencies only as parameter names, which a minifier breaks: $rootScope, $timeout",
+      "module": "harbor.cart",
+      "modern": null,
+      "basis": [
+        {
+          "text": "a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "config blocks run while the providers are set up, before any service exists, and run blocks run once the injector is made, much like the main method of the app",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "a component names what it needs in an inline array before its function, in an $inject property, or only through the names of its parameters, and the last form breaks once a minifier renames the parameters",
+          "source": "Dependency Injection (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/di"
+        }
+      ],
+      "own": "a registration is read when it is chained on angular.module(...) or on a variable that holds a module (in the same file, or in exactly one way across the files read); the annotation is the array, $inject, implicit (parameter names only) or none, as far as the file shows it"
+    },
+    {
+      "rule": "module-registration",
+      "level": "info",
+      "category": "inventory",
+      "file": "examples/legacy/app/cart/cart.module.js",
+      "line": 8,
+      "column": 4,
+      "at": "examples/legacy/app/cart/cart.module.js:8",
+      "found": "directive quickAdd on harbor.cart; dependencies in an array: $compile",
+      "module": "harbor.cart",
+      "modern": null,
+      "basis": [
+        {
+          "text": "a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "config blocks run while the providers are set up, before any service exists, and run blocks run once the injector is made, much like the main method of the app",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "a component names what it needs in an inline array before its function, in an $inject property, or only through the names of its parameters, and the last form breaks once a minifier renames the parameters",
+          "source": "Dependency Injection (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/di"
+        }
+      ],
+      "own": "a registration is read when it is chained on angular.module(...) or on a variable that holds a module (in the same file, or in exactly one way across the files read); the annotation is the array, $inject, implicit (parameter names only) or none, as far as the file shows it"
+    },
+    {
+      "rule": "module-declaration",
+      "level": "info",
+      "category": "inventory",
+      "file": "examples/legacy/app/catalog/catalog.module.js",
+      "line": 2,
+      "column": 9,
+      "at": "examples/legacy/app/catalog/catalog.module.js:2",
+      "found": "module harbor.catalog is declared with 1 dependency: harbor.core",
+      "module": "harbor.catalog",
+      "modern": null,
+      "basis": [
+        {
+          "text": "a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "the guide to upgrading from AngularJS advises one component per file, folders by feature, a module loader, TypeScript and component directives, and then a hybrid app that moves the code piece by piece",
+          "source": "Upgrading from AngularJS (Angular documentation, v17)",
+          "url": "https://v17.angular.io/guide/upgrade"
+        }
+      ],
+      "own": "only a call with a string literal as its name and a second argument counts as a declaration; a dependency that is not a string literal is counted, not named"
+    },
+    {
+      "rule": "module-registration",
+      "level": "info",
+      "category": "inventory",
+      "file": "examples/legacy/app/catalog/catalog.module.js",
+      "line": 3,
+      "column": 4,
+      "at": "examples/legacy/app/catalog/catalog.module.js:3",
+      "found": "controller CatalogController on harbor.catalog; dependencies in an array: $scope, teaStore",
+      "module": "harbor.catalog",
+      "modern": null,
+      "basis": [
+        {
+          "text": "a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "config blocks run while the providers are set up, before any service exists, and run blocks run once the injector is made, much like the main method of the app",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "a component names what it needs in an inline array before its function, in an $inject property, or only through the names of its parameters, and the last form breaks once a minifier renames the parameters",
+          "source": "Dependency Injection (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/di"
+        }
+      ],
+      "own": "a registration is read when it is chained on angular.module(...) or on a variable that holds a module (in the same file, or in exactly one way across the files read); the annotation is the array, $inject, implicit (parameter names only) or none, as far as the file shows it"
+    },
+    {
+      "rule": "module-registration",
+      "level": "info",
+      "category": "inventory",
+      "file": "examples/legacy/app/catalog/catalog.module.js",
+      "line": 16,
+      "column": 4,
+      "at": "examples/legacy/app/catalog/catalog.module.js:16",
+      "found": "directive teaCard on harbor.catalog; no dependency",
+      "module": "harbor.catalog",
+      "modern": null,
+      "basis": [
+        {
+          "text": "a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "config blocks run while the providers are set up, before any service exists, and run blocks run once the injector is made, much like the main method of the app",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "a component names what it needs in an inline array before its function, in an $inject property, or only through the names of its parameters, and the last form breaks once a minifier renames the parameters",
+          "source": "Dependency Injection (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/di"
+        }
+      ],
+      "own": "a registration is read when it is chained on angular.module(...) or on a variable that holds a module (in the same file, or in exactly one way across the files read); the annotation is the array, $inject, implicit (parameter names only) or none, as far as the file shows it"
+    },
+    {
+      "rule": "template-filter",
+      "level": "info",
+      "category": "inventory",
+      "file": "examples/legacy/app/catalog/tea-card.html",
+      "line": 2,
+      "column": 21,
+      "at": "examples/legacy/app/catalog/tea-card.html:2",
+      "found": "filter uppercase (built in) is used once in this template",
+      "module": null,
+      "modern": "a pipe in the Angular template, with the same | syntax; a custom filter becomes a pipe class",
+      "basis": [
+        {
+          "text": "a filter is applied in a template expression with the | character, takes its arguments after colons, and filters can be chained",
+          "source": "Filters (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/filter"
+        },
+        {
+          "text": "a pipe transforms a value in a template with the | operator, takes its arguments after colons, and pipes chain from left to right",
+          "source": "Pipes (angular.dev)",
+          "url": "https://angular.dev/guide/templates/pipes"
+        }
+      ],
+      "own": "counted once per filter name and template, at its first use; the expressions read are the {{ }} interpolations and the values of ng attributes that hold expressions"
+    },
+    {
+      "rule": "template-filter",
+      "level": "info",
+      "category": "inventory",
+      "file": "examples/legacy/app/catalog/tea-card.html",
+      "line": 3,
+      "column": 27,
+      "at": "examples/legacy/app/catalog/tea-card.html:3",
+      "found": "filter steepTime (registered on harbor.core) is used once in this template",
+      "module": "harbor.core",
+      "modern": "a pipe in the Angular template, with the same | syntax; a custom filter becomes a pipe class",
+      "basis": [
+        {
+          "text": "a filter is applied in a template expression with the | character, takes its arguments after colons, and filters can be chained",
+          "source": "Filters (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/filter"
+        },
+        {
+          "text": "a pipe transforms a value in a template with the | operator, takes its arguments after colons, and pipes chain from left to right",
+          "source": "Pipes (angular.dev)",
+          "url": "https://angular.dev/guide/templates/pipes"
+        }
+      ],
+      "own": "counted once per filter name and template, at its first use; the expressions read are the {{ }} interpolations and the values of ng attributes that hold expressions"
+    },
+    {
+      "rule": "template-filter",
+      "level": "info",
+      "category": "inventory",
+      "file": "examples/legacy/app/catalog/tea-card.html",
+      "line": 3,
+      "column": 56,
+      "at": "examples/legacy/app/catalog/tea-card.html:3",
+      "found": "filter currency (built in) is used once in this template",
+      "module": null,
+      "modern": "a pipe in the Angular template, with the same | syntax; a custom filter becomes a pipe class",
+      "basis": [
+        {
+          "text": "a filter is applied in a template expression with the | character, takes its arguments after colons, and filters can be chained",
+          "source": "Filters (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/filter"
+        },
+        {
+          "text": "a pipe transforms a value in a template with the | operator, takes its arguments after colons, and pipes chain from left to right",
+          "source": "Pipes (angular.dev)",
+          "url": "https://angular.dev/guide/templates/pipes"
+        }
+      ],
+      "own": "counted once per filter name and template, at its first use; the expressions read are the {{ }} interpolations and the values of ng attributes that hold expressions"
+    },
+    {
+      "rule": "module-registration",
+      "level": "info",
+      "category": "inventory",
+      "file": "examples/legacy/app/core/clock.service.ts",
+      "line": 17,
+      "column": 31,
+      "at": "examples/legacy/app/core/clock.service.ts:17",
+      "found": "service clock on harbor.core; dependencies in $inject: $interval",
+      "module": "harbor.core",
+      "modern": null,
+      "basis": [
+        {
+          "text": "a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "config blocks run while the providers are set up, before any service exists, and run blocks run once the injector is made, much like the main method of the app",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "a component names what it needs in an inline array before its function, in an $inject property, or only through the names of its parameters, and the last form breaks once a minifier renames the parameters",
+          "source": "Dependency Injection (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/di"
+        }
+      ],
+      "own": "a registration is read when it is chained on angular.module(...) or on a variable that holds a module (in the same file, or in exactly one way across the files read); the annotation is the array, $inject, implicit (parameter names only) or none, as far as the file shows it"
+    },
+    {
+      "rule": "module-declaration",
+      "level": "info",
+      "category": "inventory",
+      "file": "examples/legacy/app/core/core.module.js",
+      "line": 2,
+      "column": 20,
+      "at": "examples/legacy/app/core/core.module.js:2",
+      "found": "module harbor.core is declared with 1 dependency: ngSanitize",
+      "module": "harbor.core",
+      "modern": null,
+      "basis": [
+        {
+          "text": "a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "the guide to upgrading from AngularJS advises one component per file, folders by feature, a module loader, TypeScript and component directives, and then a hybrid app that moves the code piece by piece",
+          "source": "Upgrading from AngularJS (Angular documentation, v17)",
+          "url": "https://v17.angular.io/guide/upgrade"
+        }
+      ],
+      "own": "only a call with a string literal as its name and a second argument counts as a declaration; a dependency that is not a string literal is counted, not named"
+    },
+    {
+      "rule": "module-registration",
+      "level": "info",
+      "category": "inventory",
+      "file": "examples/legacy/app/core/core.module.js",
+      "line": 4,
+      "column": 6,
+      "at": "examples/legacy/app/core/core.module.js:4",
+      "found": "constant API_ROOT on harbor.core",
+      "module": "harbor.core",
+      "modern": null,
+      "basis": [
+        {
+          "text": "a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "config blocks run while the providers are set up, before any service exists, and run blocks run once the injector is made, much like the main method of the app",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "a component names what it needs in an inline array before its function, in an $inject property, or only through the names of its parameters, and the last form breaks once a minifier renames the parameters",
+          "source": "Dependency Injection (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/di"
+        }
+      ],
+      "own": "a registration is read when it is chained on angular.module(...) or on a variable that holds a module (in the same file, or in exactly one way across the files read); the annotation is the array, $inject, implicit (parameter names only) or none, as far as the file shows it"
+    },
+    {
+      "rule": "module-registration",
+      "level": "info",
+      "category": "inventory",
+      "file": "examples/legacy/app/core/core.module.js",
+      "line": 6,
+      "column": 6,
+      "at": "examples/legacy/app/core/core.module.js:6",
+      "found": "factory teaStore on harbor.core; dependencies in $inject: $http, API_ROOT",
+      "module": "harbor.core",
+      "modern": null,
+      "basis": [
+        {
+          "text": "a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "config blocks run while the providers are set up, before any service exists, and run blocks run once the injector is made, much like the main method of the app",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "a component names what it needs in an inline array before its function, in an $inject property, or only through the names of its parameters, and the last form breaks once a minifier renames the parameters",
+          "source": "Dependency Injection (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/di"
+        }
+      ],
+      "own": "a registration is read when it is chained on angular.module(...) or on a variable that holds a module (in the same file, or in exactly one way across the files read); the annotation is the array, $inject, implicit (parameter names only) or none, as far as the file shows it"
+    },
+    {
+      "rule": "module-registration",
+      "level": "info",
+      "category": "inventory",
+      "file": "examples/legacy/app/core/core.module.js",
+      "line": 25,
+      "column": 6,
+      "at": "examples/legacy/app/core/core.module.js:25",
+      "found": "filter steepTime on harbor.core; no dependency",
+      "module": "harbor.core",
+      "modern": null,
+      "basis": [
+        {
+          "text": "a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "config blocks run while the providers are set up, before any service exists, and run blocks run once the injector is made, much like the main method of the app",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "a component names what it needs in an inline array before its function, in an $inject property, or only through the names of its parameters, and the last form breaks once a minifier renames the parameters",
+          "source": "Dependency Injection (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/di"
+        }
+      ],
+      "own": "a registration is read when it is chained on angular.module(...) or on a variable that holds a module (in the same file, or in exactly one way across the files read); the annotation is the array, $inject, implicit (parameter names only) or none, as far as the file shows it"
+    },
+    {
+      "rule": "module-declaration",
+      "level": "info",
+      "category": "inventory",
+      "file": "examples/legacy/app/promo/promo.module.js",
+      "line": 3,
+      "column": 9,
+      "at": "examples/legacy/app/promo/promo.module.js:3",
+      "found": "module harbor.promo is declared with 1 dependency: harbor.offers",
+      "module": "harbor.promo",
+      "modern": null,
+      "basis": [
+        {
+          "text": "a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "the guide to upgrading from AngularJS advises one component per file, folders by feature, a module loader, TypeScript and component directives, and then a hybrid app that moves the code piece by piece",
+          "source": "Upgrading from AngularJS (Angular documentation, v17)",
+          "url": "https://v17.angular.io/guide/upgrade"
+        }
+      ],
+      "own": "only a call with a string literal as its name and a second argument counts as a declaration; a dependency that is not a string literal is counted, not named"
+    },
+    {
+      "rule": "module-registration",
+      "level": "info",
+      "category": "inventory",
+      "file": "examples/legacy/app/promo/promo.module.js",
+      "line": 3,
+      "column": 51,
+      "at": "examples/legacy/app/promo/promo.module.js:3",
+      "found": "value promoBanner on harbor.promo",
+      "module": "harbor.promo",
+      "modern": null,
+      "basis": [
+        {
+          "text": "a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "config blocks run while the providers are set up, before any service exists, and run blocks run once the injector is made, much like the main method of the app",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "a component names what it needs in an inline array before its function, in an $inject property, or only through the names of its parameters, and the last form breaks once a minifier renames the parameters",
+          "source": "Dependency Injection (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/di"
+        }
+      ],
+      "own": "a registration is read when it is chained on angular.module(...) or on a variable that holds a module (in the same file, or in exactly one way across the files read); the annotation is the array, $inject, implicit (parameter names only) or none, as far as the file shows it"
+    },
+    {
+      "rule": "module-declaration",
+      "level": "info",
+      "category": "inventory",
+      "file": "examples/legacy/app/promo/promo.module.js",
+      "line": 4,
+      "column": 9,
+      "at": "examples/legacy/app/promo/promo.module.js:4",
+      "found": "module harbor.offers is declared with 1 dependency: harbor.promo",
+      "module": "harbor.offers",
+      "modern": null,
+      "basis": [
+        {
+          "text": "a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        },
+        {
+          "text": "the guide to upgrading from AngularJS advises one component per file, folders by feature, a module loader, TypeScript and component directives, and then a hybrid app that moves the code piece by piece",
+          "source": "Upgrading from AngularJS (Angular documentation, v17)",
+          "url": "https://v17.angular.io/guide/upgrade"
+        }
+      ],
+      "own": "only a call with a string literal as its name and a second argument counts as a declaration; a dependency that is not a string literal is counted, not named"
+    },
+    {
+      "rule": "dynamic-name",
+      "level": "info",
+      "category": "inventory",
+      "file": "examples/legacy/app/promo/promo.module.js",
+      "line": 9,
+      "column": 9,
+      "at": "examples/legacy/app/promo/promo.module.js:9",
+      "found": "angular.module is called with a name that is not a string literal, so the module it declares cannot be named; registrations chained on it are counted on no module",
+      "module": null,
+      "modern": null,
+      "basis": [
+        {
+          "text": "a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained",
+          "source": "Modules (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/module"
+        }
+      ],
+      "own": "the inventory counts such a call but cannot name it, and a registration on a module whose name is not a string literal is not placed on any module"
+    },
+    {
+      "rule": "template-filter",
+      "level": "info",
+      "category": "inventory",
+      "file": "examples/legacy/index.html",
+      "line": 6,
+      "column": 42,
+      "at": "examples/legacy/index.html:6",
+      "found": "filter uppercase (built in) is used once in this template",
+      "module": null,
+      "modern": "a pipe in the Angular template, with the same | syntax; a custom filter becomes a pipe class",
+      "basis": [
+        {
+          "text": "a filter is applied in a template expression with the | character, takes its arguments after colons, and filters can be chained",
+          "source": "Filters (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/filter"
+        },
+        {
+          "text": "a pipe transforms a value in a template with the | operator, takes its arguments after colons, and pipes chain from left to right",
+          "source": "Pipes (angular.dev)",
+          "url": "https://angular.dev/guide/templates/pipes"
+        }
+      ],
+      "own": "counted once per filter name and template, at its first use; the expressions read are the {{ }} interpolations and the values of ng attributes that hold expressions"
+    },
+    {
+      "rule": "template-filter",
+      "level": "info",
+      "category": "inventory",
+      "file": "examples/legacy/index.html",
+      "line": 12,
+      "column": 44,
+      "at": "examples/legacy/index.html:12",
+      "found": "filter orderBy (built in) is used once in this template",
+      "module": null,
+      "modern": "a pipe in the Angular template, with the same | syntax; a custom filter becomes a pipe class",
+      "basis": [
+        {
+          "text": "a filter is applied in a template expression with the | character, takes its arguments after colons, and filters can be chained",
+          "source": "Filters (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/filter"
+        },
+        {
+          "text": "a pipe transforms a value in a template with the | operator, takes its arguments after colons, and pipes chain from left to right",
+          "source": "Pipes (angular.dev)",
+          "url": "https://angular.dev/guide/templates/pipes"
+        }
+      ],
+      "own": "counted once per filter name and template, at its first use; the expressions read are the {{ }} interpolations and the values of ng attributes that hold expressions"
+    },
+    {
+      "rule": "template-filter",
+      "level": "info",
+      "category": "inventory",
+      "file": "examples/legacy/index.html",
+      "line": 13,
+      "column": 53,
+      "at": "examples/legacy/index.html:13",
+      "found": "filter currency (built in) is used once in this template",
+      "module": null,
+      "modern": "a pipe in the Angular template, with the same | syntax; a custom filter becomes a pipe class",
+      "basis": [
+        {
+          "text": "a filter is applied in a template expression with the | character, takes its arguments after colons, and filters can be chained",
+          "source": "Filters (AngularJS Developer Guide)",
+          "url": "https://docs.angularjs.org/guide/filter"
+        },
+        {
+          "text": "a pipe transforms a value in a template with the | operator, takes its arguments after colons, and pipes chain from left to right",
+          "source": "Pipes (angular.dev)",
+          "url": "https://angular.dev/guide/templates/pipes"
+        }
+      ],
+      "own": "counted once per filter name and template, at its first use; the expressions read are the {{ }} interpolations and the values of ng attributes that hold expressions"
+    }
+  ],
+  "inventory": {
+    "counts": {
+      "files": 12,
+      "byKind": {
+        "javascript": 6,
+        "typescript": 1,
+        "template": 5
+      },
+      "lines": 137,
+      "notRead": 1,
+      "modules": 6,
+      "dynamicModules": 1,
+      "registrations": 11,
+      "unplacedRegistrations": 0
+    },
+    "registrations": {
+      "byKind": {
+        "controller": 1,
+        "directive": 2,
+        "component": 1,
+        "service": 1,
+        "factory": 1,
+        "provider": 0,
+        "filter": 1,
+        "constant": 1,
+        "value": 1,
+        "config": 1,
+        "run": 1
+      },
+      "annotations": {
+        "array": 4,
+        "$inject": 2,
+        "implicit": 1,
+        "none": 2,
+        "unknown": 0
+      },
+      "list": [
+        {
+          "module": "harbor",
+          "kind": "config",
+          "name": "",
+          "file": "examples/legacy/app/app.module.js",
+          "line": 7,
+          "annotation": "array",
+          "deps": [
+            "$routeProvider"
+          ]
+        },
+        {
+          "module": "harbor",
+          "kind": "run",
+          "name": "",
+          "file": "examples/legacy/app/app.module.js",
+          "line": 10,
+          "annotation": "array",
+          "deps": [
+            "$rootScope",
+            "$log"
+          ]
+        },
+        {
+          "module": "harbor.cart",
+          "kind": "component",
+          "name": "cartSummary",
+          "file": "examples/legacy/app/cart/cart.module.js",
+          "line": 3,
+          "annotation": "implicit",
+          "deps": [
+            "$rootScope",
+            "$timeout"
+          ]
+        },
+        {
+          "module": "harbor.cart",
+          "kind": "directive",
+          "name": "quickAdd",
+          "file": "examples/legacy/app/cart/cart.module.js",
+          "line": 8,
+          "annotation": "array",
+          "deps": [
+            "$compile"
+          ]
+        },
+        {
+          "module": "harbor.catalog",
+          "kind": "controller",
+          "name": "CatalogController",
+          "file": "examples/legacy/app/catalog/catalog.module.js",
+          "line": 3,
+          "annotation": "array",
+          "deps": [
+            "$scope",
+            "teaStore"
+          ]
+        },
+        {
+          "module": "harbor.catalog",
+          "kind": "directive",
+          "name": "teaCard",
+          "file": "examples/legacy/app/catalog/catalog.module.js",
+          "line": 16,
+          "annotation": "none",
+          "deps": []
+        },
+        {
+          "module": "harbor.core",
+          "kind": "service",
+          "name": "clock",
+          "file": "examples/legacy/app/core/clock.service.ts",
+          "line": 17,
+          "annotation": "$inject",
+          "deps": [
+            "$interval"
+          ]
+        },
+        {
+          "module": "harbor.core",
+          "kind": "constant",
+          "name": "API_ROOT",
+          "file": "examples/legacy/app/core/core.module.js",
+          "line": 4,
+          "annotation": null,
+          "deps": []
+        },
+        {
+          "module": "harbor.core",
+          "kind": "factory",
+          "name": "teaStore",
+          "file": "examples/legacy/app/core/core.module.js",
+          "line": 6,
+          "annotation": "$inject",
+          "deps": [
+            "$http",
+            "API_ROOT"
+          ]
+        },
+        {
+          "module": "harbor.core",
+          "kind": "filter",
+          "name": "steepTime",
+          "file": "examples/legacy/app/core/core.module.js",
+          "line": 25,
+          "annotation": "none",
+          "deps": []
+        },
+        {
+          "module": "harbor.promo",
+          "kind": "value",
+          "name": "promoBanner",
+          "file": "examples/legacy/app/promo/promo.module.js",
+          "line": 3,
+          "annotation": null,
+          "deps": []
+        }
+      ]
+    },
+    "modules": [
+      {
+        "name": "harbor.core",
+        "declared": true,
+        "file": "examples/legacy/app/core/core.module.js",
+        "line": 2,
+        "dependencies": [
+          "ngSanitize"
+        ],
+        "dynamicDependencies": 0,
+        "localDependencies": [],
+        "dependents": [
+          "harbor",
+          "harbor.cart",
+          "harbor.catalog"
+        ],
+        "registrations": {
+          "service": 1,
+          "factory": 1,
+          "filter": 1,
+          "constant": 1
+        },
+        "files": 2,
+        "lines": 37,
+        "risks": 1,
+        "score": 28,
+        "order": 1,
+        "brokeCycle": false
+      },
+      {
+        "name": "harbor.catalog",
+        "declared": true,
+        "file": "examples/legacy/app/catalog/catalog.module.js",
+        "line": 2,
+        "dependencies": [
+          "harbor.core"
+        ],
+        "dynamicDependencies": 0,
+        "localDependencies": [
+          "harbor.core"
+        ],
+        "dependents": [
+          "harbor",
+          "harbor.cart"
+        ],
+        "registrations": {
+          "controller": 1,
+          "directive": 1
+        },
+        "files": 2,
+        "lines": 25,
+        "risks": 4,
+        "score": 25,
+        "order": 2,
+        "brokeCycle": false
+      },
+      {
+        "name": "harbor.cart",
+        "declared": true,
+        "file": "examples/legacy/app/cart/cart.module.js",
+        "line": 2,
+        "dependencies": [
+          "harbor.core",
+          "harbor.catalog"
+        ],
+        "dynamicDependencies": 0,
+        "localDependencies": [
+          "harbor.core",
+          "harbor.catalog"
+        ],
+        "dependents": [
+          "harbor"
+        ],
+        "registrations": {
+          "directive": 1,
+          "component": 1
+        },
+        "files": 2,
+        "lines": 27,
+        "risks": 5,
+        "score": 29,
+        "order": 3,
+        "brokeCycle": false
+      },
+      {
+        "name": "harbor",
+        "declared": true,
+        "file": "examples/legacy/app/app.module.js",
+        "line": 6,
+        "dependencies": [
+          "harbor.core",
+          "harbor.catalog",
+          "harbor.cart",
+          "ngRoute"
+        ],
+        "dynamicDependencies": 0,
+        "localDependencies": [
+          "harbor.core",
+          "harbor.catalog",
+          "harbor.cart"
+        ],
+        "dependents": [],
+        "registrations": {
+          "config": 1,
+          "run": 1
+        },
+        "files": 2,
+        "lines": 18,
+        "risks": 2,
+        "score": 19,
+        "order": 4,
+        "brokeCycle": false
+      },
+      {
+        "name": "harbor.offers",
+        "declared": true,
+        "file": "examples/legacy/app/promo/promo.module.js",
+        "line": 4,
+        "dependencies": [
+          "harbor.promo"
+        ],
+        "dynamicDependencies": 0,
+        "localDependencies": [
+          "harbor.promo"
+        ],
+        "dependents": [
+          "harbor.promo"
+        ],
+        "registrations": {},
+        "files": 0,
+        "lines": 0,
+        "risks": 0,
+        "score": 0,
+        "order": 5,
+        "brokeCycle": true
+      },
+      {
+        "name": "harbor.promo",
+        "declared": true,
+        "file": "examples/legacy/app/promo/promo.module.js",
+        "line": 3,
+        "dependencies": [
+          "harbor.offers"
+        ],
+        "dynamicDependencies": 0,
+        "localDependencies": [
+          "harbor.offers"
+        ],
+        "dependents": [
+          "harbor.offers"
+        ],
+        "registrations": {
+          "value": 1
+        },
+        "files": 1,
+        "lines": 7,
+        "risks": 2,
+        "score": 12,
+        "order": 6,
+        "brokeCycle": false
+      }
+    ],
+    "external": [
+      {
+        "name": "ngRoute",
+        "dependents": [
+          "harbor"
+        ]
+      },
+      {
+        "name": "ngSanitize",
+        "dependents": [
+          "harbor.core"
+        ]
+      }
+    ],
+    "cycles": [
+      [
+        "harbor.offers",
+        "harbor.promo"
+      ]
+    ],
+    "order": [
+      "harbor.core",
+      "harbor.catalog",
+      "harbor.cart",
+      "harbor",
+      "harbor.offers",
+      "harbor.promo"
+    ],
+    "templates": {
+      "files": 5,
+      "controllers": 1,
+      "includes": 1,
+      "filters": [
+        {
+          "name": "currency",
+          "origin": "built in",
+          "module": null,
+          "uses": 4,
+          "templates": 3
+        },
+        {
+          "name": "uppercase",
+          "origin": "built in",
+          "module": null,
+          "uses": 2,
+          "templates": 2
+        },
+        {
+          "name": "orderBy",
+          "origin": "built in",
+          "module": null,
+          "uses": 1,
+          "templates": 1
+        },
+        {
+          "name": "steepTime",
+          "origin": "custom",
+          "module": "harbor.core",
+          "uses": 1,
+          "templates": 1
+        }
+      ],
+      "directives": [
+        {
+          "name": "ngRepeat",
+          "kind": "built in",
+          "module": null,
+          "uses": 3,
+          "templates": 3
+        },
+        {
+          "name": "ngClick",
+          "kind": "built in",
+          "module": null,
+          "uses": 2,
+          "templates": 2
+        },
+        {
+          "name": "teaCard",
+          "kind": "directive",
+          "module": "harbor.catalog",
+          "uses": 2,
+          "templates": 2
+        },
+        {
+          "name": "cartSummary",
+          "kind": "component",
+          "module": "harbor.cart",
+          "uses": 1,
+          "templates": 1
+        },
+        {
+          "name": "ngApp",
+          "kind": "built in",
+          "module": null,
+          "uses": 1,
+          "templates": 1
+        },
+        {
+          "name": "ngController",
+          "kind": "built in",
+          "module": null,
+          "uses": 1,
+          "templates": 1
+        },
+        {
+          "name": "ngIf",
+          "kind": "built in",
+          "module": null,
+          "uses": 1,
+          "templates": 1
+        },
+        {
+          "name": "ngInclude",
+          "kind": "built in",
+          "module": null,
+          "uses": 1,
+          "templates": 1
+        },
+        {
+          "name": "ngModel",
+          "kind": "built in",
+          "module": null,
+          "uses": 1,
+          "templates": 1
+        },
+        {
+          "name": "quickAdd",
+          "kind": "directive",
+          "module": "harbor.cart",
+          "uses": 1,
+          "templates": 1
+        }
+      ]
+    },
+    "files": [
+      {
+        "file": "examples/legacy/app/app.module.js",
+        "kind": "javascript",
+        "module": "harbor",
+        "lines": 14,
+        "registrations": 2,
+        "risks": 2,
+        "score": 18,
+        "read": true
+      },
+      {
+        "file": "examples/legacy/app/cart/cart-summary.html",
+        "kind": "template",
+        "module": "harbor.cart",
+        "lines": 5,
+        "registrations": 0,
+        "risks": 0,
+        "score": 1,
+        "read": true
+      },
+      {
+        "file": "examples/legacy/app/cart/cart.module.js",
+        "kind": "javascript",
+        "module": "harbor.cart",
+        "lines": 22,
+        "registrations": 2,
+        "risks": 5,
+        "score": 28,
+        "read": true
+      },
+      {
+        "file": "examples/legacy/app/catalog/catalog.html",
+        "kind": "template",
+        "module": "harbor",
+        "lines": 4,
+        "registrations": 0,
+        "risks": 0,
+        "score": 1,
+        "read": true
+      },
+      {
+        "file": "examples/legacy/app/catalog/catalog.module.js",
+        "kind": "javascript",
+        "module": "harbor.catalog",
+        "lines": 20,
+        "registrations": 2,
+        "risks": 4,
+        "score": 24,
+        "read": true
+      },
+      {
+        "file": "examples/legacy/app/catalog/tea-card.html",
+        "kind": "template",
+        "module": "harbor.catalog",
+        "lines": 5,
+        "registrations": 0,
+        "risks": 0,
+        "score": 1,
+        "read": true
+      },
+      {
+        "file": "examples/legacy/app/core/clock.service.ts",
+        "kind": "typescript",
+        "module": "harbor.core",
+        "lines": 13,
+        "registrations": 1,
+        "risks": 1,
+        "score": 10,
+        "read": true
+      },
+      {
+        "file": "examples/legacy/app/core/core.module.js",
+        "kind": "javascript",
+        "module": "harbor.core",
+        "lines": 24,
+        "registrations": 3,
+        "risks": 0,
+        "score": 18,
+        "read": true
+      },
+      {
+        "file": "examples/legacy/app/partials/footer.html",
+        "kind": "template",
+        "module": null,
+        "lines": 1,
+        "registrations": 0,
+        "risks": 0,
+        "score": 1,
+        "read": true
+      },
+      {
+        "file": "examples/legacy/app/promo/banner.js",
+        "kind": "javascript",
+        "module": null,
+        "lines": 4,
+        "registrations": 0,
+        "risks": 0,
+        "score": 1,
+        "read": false
+      },
+      {
+        "file": "examples/legacy/app/promo/promo.module.js",
+        "kind": "javascript",
+        "module": "harbor.promo",
+        "lines": 7,
+        "registrations": 1,
+        "risks": 2,
+        "score": 12,
+        "read": true
+      },
+      {
+        "file": "examples/legacy/index.html",
+        "kind": "template",
+        "module": null,
+        "lines": 18,
+        "registrations": 0,
+        "risks": 2,
+        "score": 8,
+        "read": true
+      }
+    ],
+    "weights": {
+      "linesPerPoint": 10,
+      "registration": 5,
+      "risk": 3
+    }
+  },
+  "totals": {
+    "findings": 42,
+    "byLevel": {
+      "error": 1,
+      "warning": 16,
+      "info": 25
+    },
+    "hidden": 0,
+    "notListed": 0
+  },
+  "result": {
+    "pass": false,
+    "failOn": "warning",
+    "failing": 17,
+    "byLevel": {
+      "error": 1,
+      "warning": 16,
+      "info": 25
+    },
+    "text": "FAIL - 17 findings at or above warning (1 error, 16 warning, 25 info)"
+  },
+  "notes": [],
+  "notice": "This inventory lists what the tool could read in the files it was given: module declarations, registrations with a string name, risks and template use. It does not run the code or follow a name built at run time, a registration made through a variable of another kind, or code a bundler wrote, so the counts are a lower bound (docs/limits.md)."
+}

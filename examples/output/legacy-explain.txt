@@ -1,0 +1,395 @@
+angularjs-migration-inventory: examples/legacy
+input: examples/legacy (12 files: 6 javascript, 1 typescript, 5 template)
+config: examples/config.json (Harbor Tea): 6 file patterns, 10 exclude patterns; minimum severity info; fail on warning
+rules: module-declaration (info); module-registration (info); dynamic-name (info); template-filter (info); scope-use (warning); root-scope-use (warning); scope-watch (warning); scope-event (warning); compile-use (warning); timer-use (warning); two-way-binding (warning); template-controller (warning); template-include (warning); duplicate-module (warning); module-cycle (warning); unreadable-file (error); untokenizable-file (error)
+findings: 42 (1 error, 16 warning, 25 info)
+
+Findings (42)
+
+  ERROR    untokenizable-file   examples/legacy/app/promo/banner.js:3
+           line 3, column 15: a string that is not closed before the end of its line; the file was not read past this point, and nothing in it is counted but its lines
+           rule: a script or template with a form that is not closed
+           basis: JavaScript has line and block comments, a hashbang at the very start, strings in single or double quotes, template literals with substitutions and regular expression literals, and whether a slash starts a regular expression or divides depends on what comes before it (Lexical grammar (MDN Web Docs), https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar)
+           basis: a start tag holds attributes whose values are unquoted or in single or double quotes, a comment runs from <!-- to -->, script and style hold raw text, and tag names do not depend on case (HTML Standard, section 13.1: Writing HTML documents (WHATWG), https://html.spec.whatwg.org/multipage/syntax.html)
+           the tool's own choice: a string, template literal, comment, regular expression, tag or attribute value that is not closed stops the reading of the file; nothing in it is counted except its lines; this rule cannot be set lower or off
+
+  WARNING  root-scope-use       examples/legacy/app/app.module.js:10
+           $rootScope appears 3 times in this file, first here
+           in Angular: a service provided at the root holds the shared state, with signals or an observable for its changes
+           rule: the name $rootScope, or the string '$rootScope', in a script
+           basis: every app has one root scope and child scopes that follow the structure of the page and inherit from their parents (What are Scopes? (AngularJS Developer Guide), https://docs.angularjs.org/guide/scope)
+           basis: a service provided at the root of the app is one shared instance, the place for state and logic that several components use (Creating and using services (angular.dev), https://angular.dev/guide/di/creating-and-using-services)
+           the tool's own choice: reported once per file at its first use, with the count of uses
+
+  WARNING  scope-event          examples/legacy/app/app.module.js:11
+           $on of "$routeChangeError" is called on $rootScope
+           in Angular: output() from a child to its parent; a shared service with a signal or a Subject for events that cross the app
+           rule: a call of $broadcast, $emit or $on as a method
+           basis: $emit sends an event up the tree of scopes, $broadcast sends it down to the child scopes, and $on listens for it (What are Scopes? (AngularJS Developer Guide), https://docs.angularjs.org/guide/scope)
+           basis: output declares a custom event that a child component emits to its parent, and these events do not bubble up the page (Custom events with outputs (angular.dev), https://angular.dev/guide/components/outputs)
+           basis: a service provided at the root of the app is one shared instance, the place for state and logic that several components use (Creating and using services (angular.dev), https://angular.dev/guide/di/creating-and-using-services)
+           the tool's own choice: each call is reported with the event name when it is a string literal
+
+  WARNING  two-way-binding      examples/legacy/app/cart/cart.module.js:4
+           items: '=' in the bindings of a component binds two ways
+           in Angular: input() for data in and output() for changes out, or model() with [( )] where two-way binding is meant
+           rule: a binding of the form = in a scope, bindToController or bindings object
+           basis: in the scope or bindToController object of a directive, = (also with ? or * after it) binds a value both ways, < one way, @ as a string and & as an expression ($compile (AngularJS API Reference), https://docs.angularjs.org/api/ng/service/$compile)
+           basis: a component should take its inputs with < and @ and report changes through & callbacks, so that only the component that owns the data changes it; components also make a later move to Angular easier (Understanding Components (AngularJS Developer Guide), https://docs.angularjs.org/guide/component)
+           basis: input takes data from a parent component, and a model input also sends new values back, bound with the [( )] syntax for two-way binding (Accepting data with input properties (angular.dev), https://angular.dev/guide/components/inputs)
+           the tool's own choice: a binding whose value is =, =?, =* or =*? with or without an attribute name, inside an object under scope, bindToController or bindings
+
+  WARNING  compile-use          examples/legacy/app/cart/cart.module.js:12
+           $compile is called to compile markup while the app runs
+           in Angular: NgComponentOutlet or ViewContainerRef.createComponent with a component class; markup is not compiled at run time
+           rule: a call of $compile
+           basis: $compile turns an HTML string or a piece of the page into a template function that is linked to a scope while the app runs ($compile (AngularJS API Reference), https://docs.angularjs.org/api/ng/service/$compile)
+           basis: a component that is not known in advance is rendered with NgComponentOutlet or ViewContainerRef.createComponent, from a component class that is already compiled (Programmatically rendering components (angular.dev), https://angular.dev/guide/components/programmatic-rendering)
+           the tool's own choice: each call of $compile is reported; Angular has no counterpart that compiles a template string while the app runs
+
+  WARNING  root-scope-use       examples/legacy/app/cart/cart.module.js:17
+           $rootScope appears 2 times in this file, first here
+           in Angular: a service provided at the root holds the shared state, with signals or an observable for its changes
+           rule: the name $rootScope, or the string '$rootScope', in a script
+           basis: every app has one root scope and child scopes that follow the structure of the page and inherit from their parents (What are Scopes? (AngularJS Developer Guide), https://docs.angularjs.org/guide/scope)
+           basis: a service provided at the root of the app is one shared instance, the place for state and logic that several components use (Creating and using services (angular.dev), https://angular.dev/guide/di/creating-and-using-services)
+           the tool's own choice: reported once per file at its first use, with the count of uses
+
+  WARNING  timer-use            examples/legacy/app/cart/cart.module.js:21
+           $timeout is called
+           in Angular: setTimeout and setInterval, or timer() and interval() of RxJS; with signals the view updates without a digest
+           rule: a call of $timeout or $interval
+           basis: $timeout wraps setTimeout and by default runs the function inside $apply, so the digest sees what it changed; it returns a promise that can be cancelled ($timeout (AngularJS API Reference), https://docs.angularjs.org/api/ng/service/$timeout)
+           basis: signal, computed and effect track where state is read, so derived values and side effects follow their inputs without a watcher written by hand (Signals (angular.dev), https://angular.dev/guide/signals)
+           the tool's own choice: each call is reported; the timer itself moves easily, the digest it starts is what the new code no longer has
+
+  WARNING  scope-event          examples/legacy/app/cart/cart.module.js:21
+           $broadcast of "cart:changed" is called on $rootScope
+           in Angular: output() from a child to its parent; a shared service with a signal or a Subject for events that cross the app
+           rule: a call of $broadcast, $emit or $on as a method
+           basis: $emit sends an event up the tree of scopes, $broadcast sends it down to the child scopes, and $on listens for it (What are Scopes? (AngularJS Developer Guide), https://docs.angularjs.org/guide/scope)
+           basis: output declares a custom event that a child component emits to its parent, and these events do not bubble up the page (Custom events with outputs (angular.dev), https://angular.dev/guide/components/outputs)
+           basis: a service provided at the root of the app is one shared instance, the place for state and logic that several components use (Creating and using services (angular.dev), https://angular.dev/guide/di/creating-and-using-services)
+           the tool's own choice: each call is reported with the event name when it is a string literal
+
+  WARNING  scope-use            examples/legacy/app/catalog/catalog.module.js:3
+           $scope appears 10 times in this file, first here
+           in Angular: state lives on the component class and in signals; data from a parent comes through input() and goes back through output()
+           rule: the name $scope, or the string '$scope', in a script
+           basis: every app has one root scope and child scopes that follow the structure of the page and inherit from their parents (What are Scopes? (AngularJS Developer Guide), https://docs.angularjs.org/guide/scope)
+           basis: a component should take its inputs with < and @ and report changes through & callbacks, so that only the component that owns the data changes it; components also make a later move to Angular easier (Understanding Components (AngularJS Developer Guide), https://docs.angularjs.org/guide/component)
+           basis: the guide to upgrading from AngularJS advises one component per file, folders by feature, a module loader, TypeScript and component directives, and then a hybrid app that moves the code piece by piece (Upgrading from AngularJS (Angular documentation, v17), https://v17.angular.io/guide/upgrade)
+           the tool's own choice: reported once per file at its first use, with the count of uses: the name $scope in the code and the string '$scope' in an annotation
+
+  WARNING  scope-watch          examples/legacy/app/catalog/catalog.module.js:8
+           $watch is called on $scope
+           in Angular: computed() for a derived value, effect() for a side effect, or the input itself as a signal; RxJS for streams
+           rule: a call of $watch, $watchCollection or $watchGroup as a method
+           basis: $watch and $watchCollection observe an expression on a scope and are checked in every digest, which repeats until the model settles (What are Scopes? (AngularJS Developer Guide), https://docs.angularjs.org/guide/scope)
+           basis: signal, computed and effect track where state is read, so derived values and side effects follow their inputs without a watcher written by hand (Signals (angular.dev), https://angular.dev/guide/signals)
+           the tool's own choice: each call is reported, on whatever object it is made
+
+  WARNING  scope-event          examples/legacy/app/catalog/catalog.module.js:12
+           $on of "cart:changed" is called on $scope
+           in Angular: output() from a child to its parent; a shared service with a signal or a Subject for events that cross the app
+           rule: a call of $broadcast, $emit or $on as a method
+           basis: $emit sends an event up the tree of scopes, $broadcast sends it down to the child scopes, and $on listens for it (What are Scopes? (AngularJS Developer Guide), https://docs.angularjs.org/guide/scope)
+           basis: output declares a custom event that a child component emits to its parent, and these events do not bubble up the page (Custom events with outputs (angular.dev), https://angular.dev/guide/components/outputs)
+           basis: a service provided at the root of the app is one shared instance, the place for state and logic that several components use (Creating and using services (angular.dev), https://angular.dev/guide/di/creating-and-using-services)
+           the tool's own choice: each call is reported with the event name when it is a string literal
+
+  WARNING  two-way-binding      examples/legacy/app/catalog/catalog.module.js:19
+           tea: '=' in the isolate scope of a directive binds two ways
+           in Angular: input() for data in and output() for changes out, or model() with [( )] where two-way binding is meant
+           rule: a binding of the form = in a scope, bindToController or bindings object
+           basis: in the scope or bindToController object of a directive, = (also with ? or * after it) binds a value both ways, < one way, @ as a string and & as an expression ($compile (AngularJS API Reference), https://docs.angularjs.org/api/ng/service/$compile)
+           basis: a component should take its inputs with < and @ and report changes through & callbacks, so that only the component that owns the data changes it; components also make a later move to Angular easier (Understanding Components (AngularJS Developer Guide), https://docs.angularjs.org/guide/component)
+           basis: input takes data from a parent component, and a model input also sends new values back, bound with the [( )] syntax for two-way binding (Accepting data with input properties (angular.dev), https://angular.dev/guide/components/inputs)
+           the tool's own choice: a binding whose value is =, =?, =* or =*? with or without an attribute name, inside an object under scope, bindToController or bindings
+
+  WARNING  timer-use            examples/legacy/app/core/clock.service.ts:9
+           $interval is called
+           in Angular: setTimeout and setInterval, or timer() and interval() of RxJS; with signals the view updates without a digest
+           rule: a call of $timeout or $interval
+           basis: $timeout wraps setTimeout and by default runs the function inside $apply, so the digest sees what it changed; it returns a promise that can be cancelled ($timeout (AngularJS API Reference), https://docs.angularjs.org/api/ng/service/$timeout)
+           basis: signal, computed and effect track where state is read, so derived values and side effects follow their inputs without a watcher written by hand (Signals (angular.dev), https://angular.dev/guide/signals)
+           the tool's own choice: each call is reported; the timer itself moves easily, the digest it starts is what the new code no longer has
+
+  WARNING  module-cycle         examples/legacy/app/promo/promo.module.js:4
+           modules harbor.offers -> harbor.promo -> harbor.offers depend on each other; none of them can move before the others
+           in Angular: standalone components and services that import what they use, with no cycle between features
+           rule: a cycle in the dependencies between the modules declared in the files read
+           basis: a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: the guide to upgrading from AngularJS advises one component per file, folders by feature, a module loader, TypeScript and component directives, and then a hybrid app that moves the code piece by piece (Upgrading from AngularJS (Angular documentation, v17), https://v17.angular.io/guide/upgrade)
+           the tool's own choice: AngularJS loads such modules, but no module of the cycle can move first; the migration order breaks the cycle at the module with the fewest unmet dependencies
+
+  WARNING  duplicate-module     examples/legacy/app/promo/promo.module.js:6
+           module harbor.core is declared again; it was declared first at examples/legacy/app/core/core.module.js:2, and a second declaration replaces the module with everything registered on it before
+           in Angular: one NgModule or one set of standalone components per feature; nothing replaces a module that exists
+           rule: angular.module(name, [...]) for a name that an earlier declaration in the files read already used
+           basis: creating a module under a name that is already in use replaces that module, and with it everything that was registered on it before (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           the tool's own choice: the second and later declarations are reported; which one wins depends on the order the scripts load, which the tool does not know
+
+  WARNING  template-controller  examples/legacy/index.html:10
+           ng-controller="CatalogController" attaches the controller CatalogController to this markup (registered on harbor.catalog)
+           in Angular: a component with a selector and its own template takes the place of the controller and the markup it was attached to
+           rule: an attribute that normalizes to ngController
+           basis: ng-controller attaches a controller to a part of the page and gives it a new scope, and controller as names the instance in the template (ngController (AngularJS API Reference), https://docs.angularjs.org/api/ng/directive/ngController)
+           basis: an element or attribute name is matched to a directive after x- and data- are taken off its front and the parts split at a colon, a dash or an underscore are joined in camelCase, so ng-model, data-ng-model and ng:model all mean ngModel (Creating Custom Directives (AngularJS Developer Guide), https://docs.angularjs.org/guide/directive)
+           basis: the guide to upgrading from AngularJS advises one component per file, folders by feature, a module loader, TypeScript and component directives, and then a hybrid app that moves the code piece by piece (Upgrading from AngularJS (Angular documentation, v17), https://v17.angular.io/guide/upgrade)
+           the tool's own choice: every spelling AngularJS accepts is read: ng-controller, data-ng-controller, x-ng-controller, ng:controller and ng_controller
+
+  WARNING  template-include     examples/legacy/index.html:16
+           ng-include="'app/partials/footer.html'" fetches and compiles a template while the app runs
+           in Angular: a child component, or ngTemplateOutlet for markup kept in the same template
+           rule: an attribute or element that normalizes to ngInclude
+           basis: ng-include fetches, compiles and includes an HTML fragment whose address is an expression, written as an element or as an attribute (ngInclude (AngularJS API Reference), https://docs.angularjs.org/api/ng/directive/ngInclude)
+           basis: an element or attribute name is matched to a directive after x- and data- are taken off its front and the parts split at a colon, a dash or an underscore are joined in camelCase, so ng-model, data-ng-model and ng:model all mean ngModel (Creating Custom Directives (AngularJS Developer Guide), https://docs.angularjs.org/guide/directive)
+           the tool's own choice: the attribute and the element forms are read; the address is shown as written, since it is an expression
+
+  INFO     module-declaration   examples/legacy/app/app.module.js:6
+           module harbor is declared with 4 dependencies: harbor.core, harbor.catalog, harbor.cart, ngRoute
+           rule: a call angular.module(name, [dependencies]) with two or more arguments, which creates a module
+           basis: a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: the guide to upgrading from AngularJS advises one component per file, folders by feature, a module loader, TypeScript and component directives, and then a hybrid app that moves the code piece by piece (Upgrading from AngularJS (Angular documentation, v17), https://v17.angular.io/guide/upgrade)
+           the tool's own choice: only a call with a string literal as its name and a second argument counts as a declaration; a dependency that is not a string literal is counted, not named
+
+  INFO     module-registration  examples/legacy/app/app.module.js:7
+           config block on harbor; dependencies in an array: $routeProvider
+           rule: a call of controller, directive, component, service, factory, provider, filter, constant, value, config or run on a module, with its name and the way its dependencies are annotated
+           basis: a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: config blocks run while the providers are set up, before any service exists, and run blocks run once the injector is made, much like the main method of the app (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: a component names what it needs in an inline array before its function, in an $inject property, or only through the names of its parameters, and the last form breaks once a minifier renames the parameters (Dependency Injection (AngularJS Developer Guide), https://docs.angularjs.org/guide/di)
+           the tool's own choice: a registration is read when it is chained on angular.module(...) or on a variable that holds a module (in the same file, or in exactly one way across the files read); the annotation is the array, $inject, implicit (parameter names only) or none, as far as the file shows it
+
+  INFO     module-registration  examples/legacy/app/app.module.js:10
+           run block on harbor; dependencies in an array: $rootScope, $log
+           rule: a call of controller, directive, component, service, factory, provider, filter, constant, value, config or run on a module, with its name and the way its dependencies are annotated
+           basis: a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: config blocks run while the providers are set up, before any service exists, and run blocks run once the injector is made, much like the main method of the app (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: a component names what it needs in an inline array before its function, in an $inject property, or only through the names of its parameters, and the last form breaks once a minifier renames the parameters (Dependency Injection (AngularJS Developer Guide), https://docs.angularjs.org/guide/di)
+           the tool's own choice: a registration is read when it is chained on angular.module(...) or on a variable that holds a module (in the same file, or in exactly one way across the files read); the annotation is the array, $inject, implicit (parameter names only) or none, as far as the file shows it
+
+  INFO     template-filter      examples/legacy/app/cart/cart-summary.html:2
+           filter currency (built in) is used 2 times in this template, first here
+           in Angular: a pipe in the Angular template, with the same | syntax; a custom filter becomes a pipe class
+           rule: a | followed by a filter name in an interpolation or an ng attribute of a template
+           basis: a filter is applied in a template expression with the | character, takes its arguments after colons, and filters can be chained (Filters (AngularJS Developer Guide), https://docs.angularjs.org/guide/filter)
+           basis: a pipe transforms a value in a template with the | operator, takes its arguments after colons, and pipes chain from left to right (Pipes (angular.dev), https://angular.dev/guide/templates/pipes)
+           the tool's own choice: counted once per filter name and template, at its first use; the expressions read are the {{ }} interpolations and the values of ng attributes that hold expressions
+
+  INFO     module-declaration   examples/legacy/app/cart/cart.module.js:2
+           module harbor.cart is declared with 2 dependencies: harbor.core, harbor.catalog
+           rule: a call angular.module(name, [dependencies]) with two or more arguments, which creates a module
+           basis: a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: the guide to upgrading from AngularJS advises one component per file, folders by feature, a module loader, TypeScript and component directives, and then a hybrid app that moves the code piece by piece (Upgrading from AngularJS (Angular documentation, v17), https://v17.angular.io/guide/upgrade)
+           the tool's own choice: only a call with a string literal as its name and a second argument counts as a declaration; a dependency that is not a string literal is counted, not named
+
+  INFO     module-registration  examples/legacy/app/cart/cart.module.js:3
+           component cartSummary on harbor.cart; dependencies only as parameter names, which a minifier breaks: $rootScope, $timeout
+           rule: a call of controller, directive, component, service, factory, provider, filter, constant, value, config or run on a module, with its name and the way its dependencies are annotated
+           basis: a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: config blocks run while the providers are set up, before any service exists, and run blocks run once the injector is made, much like the main method of the app (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: a component names what it needs in an inline array before its function, in an $inject property, or only through the names of its parameters, and the last form breaks once a minifier renames the parameters (Dependency Injection (AngularJS Developer Guide), https://docs.angularjs.org/guide/di)
+           the tool's own choice: a registration is read when it is chained on angular.module(...) or on a variable that holds a module (in the same file, or in exactly one way across the files read); the annotation is the array, $inject, implicit (parameter names only) or none, as far as the file shows it
+
+  INFO     module-registration  examples/legacy/app/cart/cart.module.js:8
+           directive quickAdd on harbor.cart; dependencies in an array: $compile
+           rule: a call of controller, directive, component, service, factory, provider, filter, constant, value, config or run on a module, with its name and the way its dependencies are annotated
+           basis: a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: config blocks run while the providers are set up, before any service exists, and run blocks run once the injector is made, much like the main method of the app (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: a component names what it needs in an inline array before its function, in an $inject property, or only through the names of its parameters, and the last form breaks once a minifier renames the parameters (Dependency Injection (AngularJS Developer Guide), https://docs.angularjs.org/guide/di)
+           the tool's own choice: a registration is read when it is chained on angular.module(...) or on a variable that holds a module (in the same file, or in exactly one way across the files read); the annotation is the array, $inject, implicit (parameter names only) or none, as far as the file shows it
+
+  INFO     module-declaration   examples/legacy/app/catalog/catalog.module.js:2
+           module harbor.catalog is declared with 1 dependency: harbor.core
+           rule: a call angular.module(name, [dependencies]) with two or more arguments, which creates a module
+           basis: a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: the guide to upgrading from AngularJS advises one component per file, folders by feature, a module loader, TypeScript and component directives, and then a hybrid app that moves the code piece by piece (Upgrading from AngularJS (Angular documentation, v17), https://v17.angular.io/guide/upgrade)
+           the tool's own choice: only a call with a string literal as its name and a second argument counts as a declaration; a dependency that is not a string literal is counted, not named
+
+  INFO     module-registration  examples/legacy/app/catalog/catalog.module.js:3
+           controller CatalogController on harbor.catalog; dependencies in an array: $scope, teaStore
+           rule: a call of controller, directive, component, service, factory, provider, filter, constant, value, config or run on a module, with its name and the way its dependencies are annotated
+           basis: a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: config blocks run while the providers are set up, before any service exists, and run blocks run once the injector is made, much like the main method of the app (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: a component names what it needs in an inline array before its function, in an $inject property, or only through the names of its parameters, and the last form breaks once a minifier renames the parameters (Dependency Injection (AngularJS Developer Guide), https://docs.angularjs.org/guide/di)
+           the tool's own choice: a registration is read when it is chained on angular.module(...) or on a variable that holds a module (in the same file, or in exactly one way across the files read); the annotation is the array, $inject, implicit (parameter names only) or none, as far as the file shows it
+
+  INFO     module-registration  examples/legacy/app/catalog/catalog.module.js:16
+           directive teaCard on harbor.catalog; no dependency
+           rule: a call of controller, directive, component, service, factory, provider, filter, constant, value, config or run on a module, with its name and the way its dependencies are annotated
+           basis: a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: config blocks run while the providers are set up, before any service exists, and run blocks run once the injector is made, much like the main method of the app (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: a component names what it needs in an inline array before its function, in an $inject property, or only through the names of its parameters, and the last form breaks once a minifier renames the parameters (Dependency Injection (AngularJS Developer Guide), https://docs.angularjs.org/guide/di)
+           the tool's own choice: a registration is read when it is chained on angular.module(...) or on a variable that holds a module (in the same file, or in exactly one way across the files read); the annotation is the array, $inject, implicit (parameter names only) or none, as far as the file shows it
+
+  INFO     template-filter      examples/legacy/app/catalog/tea-card.html:2
+           filter uppercase (built in) is used once in this template
+           in Angular: a pipe in the Angular template, with the same | syntax; a custom filter becomes a pipe class
+           rule: a | followed by a filter name in an interpolation or an ng attribute of a template
+           basis: a filter is applied in a template expression with the | character, takes its arguments after colons, and filters can be chained (Filters (AngularJS Developer Guide), https://docs.angularjs.org/guide/filter)
+           basis: a pipe transforms a value in a template with the | operator, takes its arguments after colons, and pipes chain from left to right (Pipes (angular.dev), https://angular.dev/guide/templates/pipes)
+           the tool's own choice: counted once per filter name and template, at its first use; the expressions read are the {{ }} interpolations and the values of ng attributes that hold expressions
+
+  INFO     template-filter      examples/legacy/app/catalog/tea-card.html:3
+           filter steepTime (registered on harbor.core) is used once in this template
+           in Angular: a pipe in the Angular template, with the same | syntax; a custom filter becomes a pipe class
+           rule: a | followed by a filter name in an interpolation or an ng attribute of a template
+           basis: a filter is applied in a template expression with the | character, takes its arguments after colons, and filters can be chained (Filters (AngularJS Developer Guide), https://docs.angularjs.org/guide/filter)
+           basis: a pipe transforms a value in a template with the | operator, takes its arguments after colons, and pipes chain from left to right (Pipes (angular.dev), https://angular.dev/guide/templates/pipes)
+           the tool's own choice: counted once per filter name and template, at its first use; the expressions read are the {{ }} interpolations and the values of ng attributes that hold expressions
+
+  INFO     template-filter      examples/legacy/app/catalog/tea-card.html:3
+           filter currency (built in) is used once in this template
+           in Angular: a pipe in the Angular template, with the same | syntax; a custom filter becomes a pipe class
+           rule: a | followed by a filter name in an interpolation or an ng attribute of a template
+           basis: a filter is applied in a template expression with the | character, takes its arguments after colons, and filters can be chained (Filters (AngularJS Developer Guide), https://docs.angularjs.org/guide/filter)
+           basis: a pipe transforms a value in a template with the | operator, takes its arguments after colons, and pipes chain from left to right (Pipes (angular.dev), https://angular.dev/guide/templates/pipes)
+           the tool's own choice: counted once per filter name and template, at its first use; the expressions read are the {{ }} interpolations and the values of ng attributes that hold expressions
+
+  INFO     module-registration  examples/legacy/app/core/clock.service.ts:17
+           service clock on harbor.core; dependencies in $inject: $interval
+           rule: a call of controller, directive, component, service, factory, provider, filter, constant, value, config or run on a module, with its name and the way its dependencies are annotated
+           basis: a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: config blocks run while the providers are set up, before any service exists, and run blocks run once the injector is made, much like the main method of the app (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: a component names what it needs in an inline array before its function, in an $inject property, or only through the names of its parameters, and the last form breaks once a minifier renames the parameters (Dependency Injection (AngularJS Developer Guide), https://docs.angularjs.org/guide/di)
+           the tool's own choice: a registration is read when it is chained on angular.module(...) or on a variable that holds a module (in the same file, or in exactly one way across the files read); the annotation is the array, $inject, implicit (parameter names only) or none, as far as the file shows it
+
+  INFO     module-declaration   examples/legacy/app/core/core.module.js:2
+           module harbor.core is declared with 1 dependency: ngSanitize
+           rule: a call angular.module(name, [dependencies]) with two or more arguments, which creates a module
+           basis: a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: the guide to upgrading from AngularJS advises one component per file, folders by feature, a module loader, TypeScript and component directives, and then a hybrid app that moves the code piece by piece (Upgrading from AngularJS (Angular documentation, v17), https://v17.angular.io/guide/upgrade)
+           the tool's own choice: only a call with a string literal as its name and a second argument counts as a declaration; a dependency that is not a string literal is counted, not named
+
+  INFO     module-registration  examples/legacy/app/core/core.module.js:4
+           constant API_ROOT on harbor.core
+           rule: a call of controller, directive, component, service, factory, provider, filter, constant, value, config or run on a module, with its name and the way its dependencies are annotated
+           basis: a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: config blocks run while the providers are set up, before any service exists, and run blocks run once the injector is made, much like the main method of the app (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: a component names what it needs in an inline array before its function, in an $inject property, or only through the names of its parameters, and the last form breaks once a minifier renames the parameters (Dependency Injection (AngularJS Developer Guide), https://docs.angularjs.org/guide/di)
+           the tool's own choice: a registration is read when it is chained on angular.module(...) or on a variable that holds a module (in the same file, or in exactly one way across the files read); the annotation is the array, $inject, implicit (parameter names only) or none, as far as the file shows it
+
+  INFO     module-registration  examples/legacy/app/core/core.module.js:6
+           factory teaStore on harbor.core; dependencies in $inject: $http, API_ROOT
+           rule: a call of controller, directive, component, service, factory, provider, filter, constant, value, config or run on a module, with its name and the way its dependencies are annotated
+           basis: a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: config blocks run while the providers are set up, before any service exists, and run blocks run once the injector is made, much like the main method of the app (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: a component names what it needs in an inline array before its function, in an $inject property, or only through the names of its parameters, and the last form breaks once a minifier renames the parameters (Dependency Injection (AngularJS Developer Guide), https://docs.angularjs.org/guide/di)
+           the tool's own choice: a registration is read when it is chained on angular.module(...) or on a variable that holds a module (in the same file, or in exactly one way across the files read); the annotation is the array, $inject, implicit (parameter names only) or none, as far as the file shows it
+
+  INFO     module-registration  examples/legacy/app/core/core.module.js:25
+           filter steepTime on harbor.core; no dependency
+           rule: a call of controller, directive, component, service, factory, provider, filter, constant, value, config or run on a module, with its name and the way its dependencies are annotated
+           basis: a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: config blocks run while the providers are set up, before any service exists, and run blocks run once the injector is made, much like the main method of the app (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: a component names what it needs in an inline array before its function, in an $inject property, or only through the names of its parameters, and the last form breaks once a minifier renames the parameters (Dependency Injection (AngularJS Developer Guide), https://docs.angularjs.org/guide/di)
+           the tool's own choice: a registration is read when it is chained on angular.module(...) or on a variable that holds a module (in the same file, or in exactly one way across the files read); the annotation is the array, $inject, implicit (parameter names only) or none, as far as the file shows it
+
+  INFO     module-declaration   examples/legacy/app/promo/promo.module.js:3
+           module harbor.promo is declared with 1 dependency: harbor.offers
+           rule: a call angular.module(name, [dependencies]) with two or more arguments, which creates a module
+           basis: a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: the guide to upgrading from AngularJS advises one component per file, folders by feature, a module loader, TypeScript and component directives, and then a hybrid app that moves the code piece by piece (Upgrading from AngularJS (Angular documentation, v17), https://v17.angular.io/guide/upgrade)
+           the tool's own choice: only a call with a string literal as its name and a second argument counts as a declaration; a dependency that is not a string literal is counted, not named
+
+  INFO     module-registration  examples/legacy/app/promo/promo.module.js:3
+           value promoBanner on harbor.promo
+           rule: a call of controller, directive, component, service, factory, provider, filter, constant, value, config or run on a module, with its name and the way its dependencies are annotated
+           basis: a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: config blocks run while the providers are set up, before any service exists, and run blocks run once the injector is made, much like the main method of the app (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: a component names what it needs in an inline array before its function, in an $inject property, or only through the names of its parameters, and the last form breaks once a minifier renames the parameters (Dependency Injection (AngularJS Developer Guide), https://docs.angularjs.org/guide/di)
+           the tool's own choice: a registration is read when it is chained on angular.module(...) or on a variable that holds a module (in the same file, or in exactly one way across the files read); the annotation is the array, $inject, implicit (parameter names only) or none, as far as the file shows it
+
+  INFO     module-declaration   examples/legacy/app/promo/promo.module.js:4
+           module harbor.offers is declared with 1 dependency: harbor.promo
+           rule: a call angular.module(name, [dependencies]) with two or more arguments, which creates a module
+           basis: a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           basis: the guide to upgrading from AngularJS advises one component per file, folders by feature, a module loader, TypeScript and component directives, and then a hybrid app that moves the code piece by piece (Upgrading from AngularJS (Angular documentation, v17), https://v17.angular.io/guide/upgrade)
+           the tool's own choice: only a call with a string literal as its name and a second argument counts as a declaration; a dependency that is not a string literal is counted, not named
+
+  INFO     dynamic-name         examples/legacy/app/promo/promo.module.js:9
+           angular.module is called with a name that is not a string literal, so the module it declares cannot be named; registrations chained on it are counted on no module
+           rule: an angular.module call or a registration whose name is a variable, an expression or a template with substitutions
+           basis: a call of angular.module with a name and a list of required modules creates a module, and with the name alone it returns a module that exists; the methods of a module return the module, so registrations can be chained (Modules (AngularJS Developer Guide), https://docs.angularjs.org/guide/module)
+           the tool's own choice: the inventory counts such a call but cannot name it, and a registration on a module whose name is not a string literal is not placed on any module
+
+  INFO     template-filter      examples/legacy/index.html:6
+           filter uppercase (built in) is used once in this template
+           in Angular: a pipe in the Angular template, with the same | syntax; a custom filter becomes a pipe class
+           rule: a | followed by a filter name in an interpolation or an ng attribute of a template
+           basis: a filter is applied in a template expression with the | character, takes its arguments after colons, and filters can be chained (Filters (AngularJS Developer Guide), https://docs.angularjs.org/guide/filter)
+           basis: a pipe transforms a value in a template with the | operator, takes its arguments after colons, and pipes chain from left to right (Pipes (angular.dev), https://angular.dev/guide/templates/pipes)
+           the tool's own choice: counted once per filter name and template, at its first use; the expressions read are the {{ }} interpolations and the values of ng attributes that hold expressions
+
+  INFO     template-filter      examples/legacy/index.html:12
+           filter orderBy (built in) is used once in this template
+           in Angular: a pipe in the Angular template, with the same | syntax; a custom filter becomes a pipe class
+           rule: a | followed by a filter name in an interpolation or an ng attribute of a template
+           basis: a filter is applied in a template expression with the | character, takes its arguments after colons, and filters can be chained (Filters (AngularJS Developer Guide), https://docs.angularjs.org/guide/filter)
+           basis: a pipe transforms a value in a template with the | operator, takes its arguments after colons, and pipes chain from left to right (Pipes (angular.dev), https://angular.dev/guide/templates/pipes)
+           the tool's own choice: counted once per filter name and template, at its first use; the expressions read are the {{ }} interpolations and the values of ng attributes that hold expressions
+
+  INFO     template-filter      examples/legacy/index.html:13
+           filter currency (built in) is used once in this template
+           in Angular: a pipe in the Angular template, with the same | syntax; a custom filter becomes a pipe class
+           rule: a | followed by a filter name in an interpolation or an ng attribute of a template
+           basis: a filter is applied in a template expression with the | character, takes its arguments after colons, and filters can be chained (Filters (AngularJS Developer Guide), https://docs.angularjs.org/guide/filter)
+           basis: a pipe transforms a value in a template with the | operator, takes its arguments after colons, and pipes chain from left to right (Pipes (angular.dev), https://angular.dev/guide/templates/pipes)
+           the tool's own choice: counted once per filter name and template, at its first use; the expressions read are the {{ }} interpolations and the values of ng attributes that hold expressions
+
+Modules, in the suggested migration order
+
+  order  module          dependents  files  lines  risks  score  registrations
+  1      harbor.core     3           2      37     1      28     service 1, factory 1, filter 1, constant 1
+  2      harbor.catalog  2           2      25     4      25     controller 1, directive 1
+  3      harbor.cart     1           2      27     5      29     directive 1, component 1
+  4      harbor          0           2      18     2      19     config 1, run 1
+  5*     harbor.offers   1           0      0      0      0      none
+  6      harbor.promo    1           1      7      2      12     value 1
+
+  module          declared at                                      depends on
+  harbor.core     examples/legacy/app/core/core.module.js:2        ngSanitize
+  harbor.catalog  examples/legacy/app/catalog/catalog.module.js:2  harbor.core
+  harbor.cart     examples/legacy/app/cart/cart.module.js:2        harbor.core, harbor.catalog
+  harbor          examples/legacy/app/app.module.js:6              harbor.core, harbor.catalog, harbor.cart, ngRoute
+  harbor.offers   examples/legacy/app/promo/promo.module.js:4      harbor.promo
+  harbor.promo    examples/legacy/app/promo/promo.module.js:3      harbor.offers
+
+  * placed to break a cycle of dependencies
+
+  modules not declared in the files read: ngRoute (1), ngSanitize (1)
+
+Registrations
+
+  11: controller 1, directive 2, component 1, service 1, factory 1, filter 1, constant 1, value 1, config 1, run 1
+  annotations: array 4, $inject 2, parameter names only 1, no dependency 2, not visible 0
+
+Templates
+
+  5 templates: ng-controller 1, ng-include 1
+  filters: currency 4 (built in), uppercase 2 (built in), orderBy 1 (built in), steepTime 1 (custom, harbor.core)
+  directives: ngRepeat 3, ngClick 2, teaCard 2 (directive, harbor.catalog), cartSummary 1 (component, harbor.cart), ngApp 1, ngController 1, ngIf 1, ngInclude 1, ngModel 1 and quickAdd 1 (directive, harbor.cart)
+
+Files, highest score first
+
+  score  lines  registrations  risks  module          file
+  28     22     2              5      harbor.cart     examples/legacy/app/cart/cart.module.js
+  24     20     2              4      harbor.catalog  examples/legacy/app/catalog/catalog.module.js
+  18     14     2              2      harbor          examples/legacy/app/app.module.js
+  18     24     3              0      harbor.core     examples/legacy/app/core/core.module.js
+  12     7      1              2      harbor.promo    examples/legacy/app/promo/promo.module.js
+  10     13     1              1      harbor.core     examples/legacy/app/core/clock.service.ts
+  8      18     0              2      -               examples/legacy/index.html
+  1      5      0              0      harbor.cart     examples/legacy/app/cart/cart-summary.html
+  1      4      0              0      harbor          examples/legacy/app/catalog/catalog.html
+  1      5      0              0      harbor.catalog  examples/legacy/app/catalog/tea-card.html
+  1      1      0              0      -               examples/legacy/app/partials/footer.html
+  1      4      0              0      -               examples/legacy/app/promo/banner.js (not read)
+
+  score = lines / 10 (rounded up) + 5 per registration + 3 per risk
+
+This inventory lists what the tool could read in the files it was given: module declarations, registrations with a string name, risks and template use. It does not run the code or follow a name built at run time, a registration made through a variable of another kind, or code a bundler wrote, so the counts are a lower bound (docs/limits.md).
+
+RESULT: FAIL - 17 findings at or above warning (1 error, 16 warning, 25 info)
