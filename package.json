@@ -1,0 +1,50 @@
+{
+  "name": "angularjs-migration-inventory",
+  "version": "1.0.0",
+  "description": "AngularJS migration inventory: scans an AngularJS (Angular 1.x) app before the upgrade to Angular and lists every module with its dependencies, every controller, directive, component, service, factory, provider, filter, constant, value, config and run block, the migration risks ($scope, $rootScope, $watch, $broadcast, $emit, $on, $compile, $timeout, $interval, two-way bindings, ng-controller, ng-include) with the modern Angular equivalent of each, the filters and directives of the templates, a size score per file and module and a suggested migration order. Text, JSON, CSV and GitHub annotation output, exit codes for a pipeline, no dependencies.",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "bin": {
+    "angularjs-migration-inventory": "bin/angularjs-migration-inventory.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "docs",
+    "examples",
+    "research",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test \"test/*.test.js\"",
+    "test:coverage": "node --test --experimental-test-coverage \"test/*.test.js\"",
+    "check": "node tools/check.mjs",
+    "example": "node tools/example.mjs"
+  },
+  "keywords": [
+    "angularjs",
+    "angular",
+    "angularjs-migration",
+    "angular-upgrade",
+    "migration",
+    "inventory",
+    "javascript",
+    "typescript",
+    "static-analysis",
+    "cli"
+  ],
+  "author": "INNERLUXES <info@innerluxes.dev>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/INNERLUXES/angularjs-migration-inventory.git"
+  },
+  "homepage": "https://innerluxes.dev/web-development/angular"
+}
